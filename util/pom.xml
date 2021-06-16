@@ -11,5 +11,6 @@
 
     <artifactId>util</artifactId>
 
+    <packaging>war</packaging>
 
 </project>

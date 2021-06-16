@@ -12,11 +12,32 @@
         <module>util</module>
     </modules>
 
-    <!-- 引入集合工具类依赖 -->
-    <dependency>
-        <groupId>commons-collections</groupId>
-        <artifactId>commons-collections</artifactId>
-        <version>3.1</version>
-    </dependency>
+    <properties>
+        <!-- 定义依赖的版本号 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <junit.version>4.12</junit.version>
+        <collections.version>3.2.2</collections.version>
+    </properties>
+
+
+    <dependencies>
+        <!-- 引入集合工具类依赖 -->
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>${collections.version}</version>
+        </dependency>
+        <!--测试-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>${junit.version}</scope>
+        </dependency>
+
+    </dependencies>
 
 </project>
