@@ -1,4 +1,4 @@
-package com.xgf.function;
+package com.xgf.util;
 
 import com.xgf.randomstr.RandomStrUtil;
 import org.junit.Test;
