@@ -21,7 +21,9 @@
 
         <junit.version>4.12</junit.version>
         <collections.version>3.2.2</collections.version>
+        <org.apache.commons.lang3.version>3.0</org.apache.commons.lang3.version>
         <lombok.version>1.18.16</lombok.version>
+        <com.alibaba.fastjson.version>1.2.31</com.alibaba.fastjson.version>
         <springframework.version>5.2.9.RELEASE</springframework.version>
     </properties>
 
@@ -33,12 +35,26 @@
             <artifactId>commons-collections</artifactId>
             <version>${collections.version}</version>
         </dependency>
-        <!--测试-->
+        <!-- StringUtil -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${org.apache.commons.lang3.version}</version>
+        </dependency>
+
+        <!-- junit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>compile</scope>
+        </dependency>
+
+        <!-- fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${com.alibaba.fastjson.version}</version>
         </dependency>
 
         <!-- Lombok -->
