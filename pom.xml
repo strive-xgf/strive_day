@@ -4,6 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.5.6</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
     <groupId>com.xgf</groupId>
     <artifactId>strive_day</artifactId>
     <packaging>pom</packaging>
@@ -23,13 +30,37 @@
         <collections.version>3.2.2</collections.version>
         <org.apache.commons.lang3.version>3.0</org.apache.commons.lang3.version>
         <lombok.version>1.18.16</lombok.version>
-        <org.slf4j-api.version>1.6.1</org.slf4j-api.version>
+<!--        <org.slf4j-api.version>1.6.1</org.slf4j-api.version>-->
         <com.alibaba.fastjson.version>1.2.31</com.alibaba.fastjson.version>
-        <springframework.version>5.2.9.RELEASE</springframework.version>
+<!--        <springframework.version>5.2.9.RELEASE</springframework.version>-->
     </properties>
 
 
     <dependencies>
+
+        <!-- springboot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!-- 引入集合工具类依赖 -->
         <dependency>
             <groupId>commons-collections</groupId>
@@ -66,20 +97,35 @@
         </dependency>
 
         <!-- 使用lombok报错 slf4j不存在 -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${org.slf4j-api.version}</version>
-        </dependency>
+        </dependency>-->
 
         <!-- spring -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
             <version>${springframework.version}</version>
-        </dependency>
+        </dependency>-->
+
+        <!-- springboot测试@Autowired注解的类无法自动注入，NPE异常 -->
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>-->
     </dependencies>
 
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 <!--    <build>
         <plugins>
