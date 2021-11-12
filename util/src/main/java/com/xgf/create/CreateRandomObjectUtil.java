@@ -91,7 +91,26 @@ public class CreateRandomObjectUtil {
      */
     private static void setValueToField(Object bean, Method fieldSetMethod, Field field, Boolean jumpFlag,  String randomString, Integer randomSize) throws InvocationTargetException, IllegalAccessException {
         Object value = null;
-        value = getRandomInfo(field, jumpFlag, randomString, randomSize);
+        switch (field.getType().getSimpleName()) {
+            case "List":
+                // 当前集合的泛型类型
+                Type genericType = field.getGenericType();
+                if (genericType instanceof ParameterizedType) {
+                    ParameterizedType pt = (ParameterizedType) genericType;
+                    // 获取泛型里的class类型对象
+                    Class<?> actualClass = (Class<?>) pt.getActualTypeArguments()[0];
+                    List<Object> list = new ArrayList<>();
+                    list.add(getRandomInfo(actualClass, jumpFlag, randomString, randomSize, field.getName()));
+                    value = list;
+                }else {
+                    log.info("====== List type genericType = {}， not instanceof ParameterizedType", genericType);
+                }
+                break;
+            default:
+                value = getRandomInfo(field.getType(), jumpFlag, randomString, randomSize, field.getName());
+                break;
+
+        }
         fieldSetMethod.invoke(bean, value);
     }
 
@@ -112,11 +131,10 @@ public class CreateRandomObjectUtil {
     /**
      * 按类型生成随机数据
      */
-    private static Object getRandomInfo(Field field, Boolean jumpFlag, String randomString, Integer randomSize) {
-
-        switch (field.getType().getSimpleName()) {
+    private static Object getRandomInfo(Class<?> objectClass, Boolean jumpFlag, String randomString, Integer randomSize, String fieldName) {
+        switch (objectClass.getSimpleName()) {
             case "String":
-                return getRandomStringInParam(randomString, randomSize, field.getName());
+                return getRandomStringInParam(randomString, randomSize, fieldName);
             case "Date":
                 return getRandomTimeInParam(7);
             case "Byte":
@@ -150,10 +168,10 @@ public class CreateRandomObjectUtil {
                 try {
                     if(BooleanUtils.isFalse(jumpFlag)){
                         // 递归调用，如果数据类型不能生成对应的对象返回null
-                        return createData(field.getType(), jumpFlag, randomString, randomSize);
+                        return createData(objectClass, jumpFlag, randomString, randomSize);
                     }
                 } catch (Exception e) {
-                    log.error("====== getRandomInfo subClass created exception, class = " + field.getType() + "，暂不支持该类型初始化 exception = ", e);
+                    log.error("====== getRandomInfo subClass created exception, class = " + objectClass + "，暂不支持该类型初始化 exception = ", e);
                 }
                 return null;
         }

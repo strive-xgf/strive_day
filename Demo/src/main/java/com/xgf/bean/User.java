@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author xgf
@@ -29,4 +30,7 @@ public class User {
     private BigDecimal bigDecimal;
     private Date createdTime;
     private Date updatedTime;
+    private WorkInfo workInfo;
+    private List<String> stringList;
+    private List<WorkInfo> workInfoList;
 }
