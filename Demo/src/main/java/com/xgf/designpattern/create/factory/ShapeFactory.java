@@ -1,5 +1,8 @@
 package com.xgf.designpattern.create.factory;
 
+import com.xgf.designpattern.create.abstract_factory.AbstractFactory;
+import com.xgf.designpattern.create.abstract_factory.Color;
+import com.xgf.designpattern.create.abstract_factory.ColorEnum;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -12,7 +15,7 @@ import java.util.Objects;
  **/
 
 @Component
-public class ShapeFactory {
+public class ShapeFactory extends AbstractFactory {
 
     @Resource(name = "rectangle")
     private Shape rectangle;
@@ -44,6 +47,11 @@ public class ShapeFactory {
                 return null;
         }
 
+    }
+
+    @Override
+    public Color getColor(ColorEnum colorEnum) {
+        return null;
     }
 
 }
