@@ -1,8 +1,8 @@
 package com.xgf.spring;
 
 import com.xgf.DemoApplication;
-import com.xgf.designpattern.factory.ShapeFactory;
-import com.xgf.designpattern.factory.ShapeTypeEnum;
+import com.xgf.designpattern.create.factory.ShapeFactory;
+import com.xgf.designpattern.create.factory.ShapeTypeEnum;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

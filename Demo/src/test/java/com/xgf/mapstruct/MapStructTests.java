@@ -5,6 +5,7 @@ import com.xgf.bean.*;
 import com.xgf.bean.User;
 import com.xgf.convert.MapStructConvert;
 import com.xgf.create.CreateRandomObjectUtil;
+import constant.*;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
@@ -40,6 +41,11 @@ public class MapStructTests {
 
     }
 
+    @Test
+    public void testEnum(){
+
+    }
+
 
     @Test
     public void testCopyData() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
@@ -52,6 +58,24 @@ public class MapStructTests {
         compareCopy(User.class, UserDTO.class, 1000000);
         System.out.println();
         compareCopy(User.class, UserDTO.class, 10000000);
+
+    }
+
+    @Test
+    public void test(){
+
+        GradeObject gradeObject = new GradeObject();
+        NumberObject numberObject = new NumberObject();
+        numberObject.setNumberEnum(NumberEnum.FIVE);
+        numberObject.setGradeCodeEnum(GradeCodeEnum2.GRADE_A);
+        System.out.println(gradeObject);
+//        BeanUtils.copyProperties(gradeObject, numberObject);
+        BeanUtils.copyProperties(numberObject, gradeObject);
+        System.out.println(gradeObject);
+        System.out.println(gradeObject.getGradeEnum());
+
+        System.out.println(mapStructConvert.enumCopy2(numberObject));
+        System.out.println(gradeObject);
 
     }
 

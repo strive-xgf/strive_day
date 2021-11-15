@@ -1,6 +1,5 @@
-package com.xgf.designpattern.factory;
+package com.xgf.designpattern.create.factory;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

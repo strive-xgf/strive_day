@@ -1,10 +1,12 @@
-package com.xgf.designpattern.factory;
+package com.xgf.designpattern.create.factory;
 
 import com.xgf.DemoApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import com.xgf.designpattern.create.factory.*;
 
 import javax.annotation.Resource;
 

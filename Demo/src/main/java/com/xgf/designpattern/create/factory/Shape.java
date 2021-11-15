@@ -1,6 +1,4 @@
-package com.xgf.designpattern.factory;
-
-import org.springframework.stereotype.Component;
+package com.xgf.designpattern.create.factory;
 
 /**
  * @author xgf
