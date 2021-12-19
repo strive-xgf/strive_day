@@ -17,13 +17,6 @@ import java.util.stream.Collectors;
  **/
 
 
-/**
- * @author xgf
- * @create 2021-11-05 15:12
- * @description MapStructTest
- **/
-
-
 @Slf4j
 public class CreateRandomObjectUtil {
 
@@ -64,13 +57,15 @@ public class CreateRandomObjectUtil {
             return null;
         }
         List<Method> methodList = Arrays.stream(classObject.getDeclaredMethods()).filter(Objects::nonNull).collect(Collectors.toList());
-        List<String> methodNameList = methodList.stream().map(Method::getName).collect(Collectors.toList());
         List<Field> fieldList = Arrays.stream(classObject.getDeclaredFields()).filter(Objects::nonNull).collect(Collectors.toList());
+
+        assembleSuperClassProperty(classObject, methodList, fieldList);
 
         if (CollectionUtils.isEmpty(methodList) || CollectionUtils.isEmpty(fieldList)) {
             return target;
         }
 
+        List<String> methodNameList = methodList.stream().map(Method::getName).collect(Collectors.toList());
         for (Field field : fieldList) {
             String assembleSetMethodeName = assembleSetMethodeName(field.getName(), "set", 0);
             if (StringUtils.isBlank(assembleSetMethodeName) || !methodNameList.contains(assembleSetMethodeName)) {
@@ -84,6 +79,23 @@ public class CreateRandomObjectUtil {
             }
         }
         return target;
+    }
+
+    /**
+     * 组装父类的字段和方法
+     * @param classObject 当前类
+     * @param methodList 方法集合
+     * @param fieldList 字段集合
+     * @param <T>
+     */
+    private static <T> void assembleSuperClassProperty(Class<T> classObject, List<Method> methodList, List<Field> fieldList){
+        Class<? super T> superclass = classObject.getSuperclass();
+        while (Objects.nonNull(superclass)) {
+            methodList.addAll(Arrays.stream(superclass.getDeclaredMethods()).filter(Objects::nonNull).collect(Collectors.toList()));
+            fieldList.addAll(Arrays.stream(superclass.getDeclaredFields()).filter(Objects::nonNull).collect(Collectors.toList()));
+            superclass = superclass.getSuperclass();
+        }
+
     }
 
     /**
