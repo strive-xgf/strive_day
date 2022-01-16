@@ -32,11 +32,19 @@ public class TaskUtilTest {
     @Test
     public void executeAsyncTest() {
         try {
+            // 捕获不到异常
 //            test2();
-            test3();
+            // 能捕获到异常
+//            test3();
+            // 能捕获到异常
+//            test4();
+            // 能捕获到异常
+            test5();
         } catch (CustomException e) {
             log.info("+++ ====== executeAsyncTest catch exception, code = 【{}】, message = 【{}】 ", e.getErrorCode(), e.getMessage(), e);
         }
+
+        System.out.println("====== 执行结束继续执行 >>>>>> ");
     }
 
     private String throwException(Boolean flag){
@@ -123,6 +131,45 @@ public class TaskUtilTest {
     }
 
 
+    @Test
+    public void test4() {
+        long startTime = System.currentTimeMillis();
+
+        boolean flag = true;
+        CompletableFuture<Void> wait1 = TaskUtil.runAsync(() -> wait1(flag));
+        CompletableFuture<Void> wait2 = TaskUtil.runAsync(() -> wait2(flag));
+        CompletableFuture<Void> wait3 = TaskUtil.runAsync(() -> wait3(flag));
+        CompletableFuture<Void> wait4 = TaskUtil.runAsync(() -> wait4(flag));
+        CompletableFuture<Person> wait5 = TaskUtil.supplyAsync(() -> wait5(flag));
+
+        try {
+            TaskUtil.waitAllThrow(wait1, wait2, wait3, wait4, wait5);
+        } finally {
+            log.info("====== test4 total cost = {} ms", System.currentTimeMillis() - startTime);
+        }
+
+    }
+
+    @Test
+    public void test5() {
+        long startTime = System.currentTimeMillis();
+
+        boolean flag = true;
+        CompletableFuture<Void> wait1 = TaskUtil.runAsync(() -> wait1(flag));
+        CompletableFuture<Void> wait2 = TaskUtil.runAsync(() -> wait2(flag));
+        CompletableFuture<Void> wait3 = TaskUtil.runAsync(() -> wait3(flag));
+        CompletableFuture<Void> wait4 = TaskUtil.runAsync(() -> wait4(flag));
+        CompletableFuture<Person> wait5 = TaskUtil.supplyAsync(() -> wait5(flag));
+
+        try {
+            TaskUtil.waitFirstException(wait3, wait2, wait4, wait5, wait1);
+//            TaskUtil.waitAnyException(wait2, wait3, wait4, wait5, wait1);
+        } finally {
+            log.info("====== test5 total cost = {} ms", System.currentTimeMillis() - startTime);
+        }
+
+    }
+
 
 
 
@@ -148,7 +195,7 @@ public class TaskUtilTest {
             Thread.sleep(600);
             log.info("====== wait2 end");
             if (flag) {
-                throw new IllegalArgumentException("wait2");
+                throw new CustomException("wait2", "wait222");
             }
             return "wait2";
         } catch (InterruptedException e) {
@@ -178,7 +225,7 @@ public class TaskUtilTest {
             Thread.sleep(700);
             log.info("====== wait4 end");
             if (flag) {
-                throw new NullPointerException("wait4");
+                throw new CustomException("wait4", "wai444");
             }
             return "wait4";
         } catch (InterruptedException e) {
