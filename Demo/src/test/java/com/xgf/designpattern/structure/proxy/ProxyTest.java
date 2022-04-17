@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.xgf.DemoApplication;
 import com.xgf.designpattern.structure.proxy.dynamicproxy.ProxyAspect;
 import com.xgf.designpattern.structure.proxy.dynamicproxy.cglib.CglibDynamicProxyHandler;
+import com.xgf.designpattern.structure.proxy.dynamicproxy.cglib.custom.CaseMethodService;
+import com.xgf.designpattern.structure.proxy.dynamicproxy.cglib.custom.CglibDynamicProxyMultiHandler;
 import com.xgf.designpattern.structure.proxy.dynamicproxy.jdk.JdkDynamicProxyHandler;
 import com.xgf.designpattern.structure.proxy.staticproxy.StaticProxyEmploy;
 import org.junit.Test;
@@ -32,6 +34,9 @@ public class ProxyTest {
 
     @Resource(name = "cglibDynamicProxyHandler")
     private CglibDynamicProxyHandler cglibDynamicProxyHandler;
+
+    @Resource(name = "cglibDynamicProxyMultiHandler")
+    private CglibDynamicProxyMultiHandler cglibDynamicProxyMultiHandler;
 
     @Test
     public void testStatic() {
@@ -64,6 +69,21 @@ public class ProxyTest {
 
         printList(companyEmploy.employPeople("Python"));
         printList(companyEmploy.employPeople("Java"));
+
+    }
+
+    @Test
+    public void testCglibDynamicFilter() {
+        CaseMethodService caseMethodService = (CaseMethodService) cglibDynamicProxyMultiHandler.createProxy(CaseMethodService.class, new ProxyAspect());
+
+        // 调用自定义回调函数
+        caseMethodService.saveOneObject();
+        // 不满足条件，继续调用一般过滤CglibDynamicProxyHandler
+        caseMethodService.batchSaveObject();
+        // 调用自定义回调函数
+        caseMethodService.deleteOneObject();
+        // 调用自定义回调函数
+        System.out.println("caseMethodService.saveOneObjectReturnResult() = " + caseMethodService.saveOneObjectReturnResult());;
 
     }
 
