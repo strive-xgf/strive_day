@@ -1,0 +1,11 @@
+server:
+  port: 8080
+# 应用名称
+spring:
+  # 环境
+  profiles:
+    active: dev
+  application:
+    name: strive_day_DEMO
+
+

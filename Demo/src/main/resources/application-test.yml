@@ -1,0 +1,11 @@
+server:
+  port: 8081
+# 应用名称
+spring:
+  # 环境
+  profiles:
+    active: test
+  application:
+    name: strive_day_DEMO_test
+
+
