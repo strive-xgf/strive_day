@@ -1,6 +1,7 @@
 package com.xgf.exception;
 
 import com.xgf.constant.EnumBase;
+import com.xgf.constant.StringConstantUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +18,8 @@ public enum CustomExceptionEnum implements EnumBase {
     PARAM_VALUE_CAN_NOT_NULL_EXCEPTION("paramValueCanNotNullException", "参数不能为空异常"),
     PARAM_TYPE_ILLEGAL_EXCEPTION("paramTypeIllegalException", "参数类型不合法异常"),
     ENUM_TYPE_ILLEGAL_EXCEPTION("enumTypeIllegalException", "枚举类型不合法"),
+    DATA_PARSE_EXCEPTION("dataParseException", "数据解析异常"),
+    REFLECT_EXCEPTION("reflectException", "反射处理异常"),
     ;
 
     private String code;
@@ -66,5 +69,14 @@ public enum CustomExceptionEnum implements EnumBase {
      */
     public CustomException generateException(String arg) {
         return new CustomException(this.getCode(), StringUtils.join(this.getValue(), arg));
+    }
+
+    /**
+     * 根据code，和多个入参（按逗号隔开）生成异常
+     * @param args 参数
+     * @return 异常信息
+     */
+    public CustomException generateException(String ...args) {
+        return new CustomException(this.getCode(), StringUtils.join(args, StringConstantUtil.COMMA));
     }
 }
