@@ -1,14 +1,17 @@
 package com.xgf.mvc.controller;
 
+import com.xgf.bean.User;
+import com.xgf.bean.WorkInfo;
+import com.xgf.constant.reqrep.CommonDataRequest;
 import com.xgf.constant.reqrep.CommonDataResponse;
+import com.xgf.randomstr.RandomStrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @author xgf
@@ -29,6 +32,15 @@ public class DemoController {
     CommonDataResponse<String> printHello(@RequestParam(value = "name") String name) {
         log.info("====== DemoController printHello in param = {}", name);
         return CommonDataResponse.ok("hello " + name);
+    }
+
+    @PostMapping(value = "/printUser")
+    @ApiOperation(value = "输出 user", notes = "输出 user")
+    CommonDataResponse<User> printUser(@RequestBody @Valid CommonDataRequest<User> req) {
+        log.info("====== DemoController printUser in param = {}", req);
+        User user = req.getParam();
+        user.setWorkInfo(WorkInfo.builder().workContent("generate workContent").workUuid(RandomStrUtil.createRandomStr(32)).build());
+        return CommonDataResponse.ok(user);
     }
 
 }
