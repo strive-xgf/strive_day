@@ -69,7 +69,7 @@ public class CommonResponse implements Serializable {
     /**
      * 响应类型（页面根据类型处理通用样式）
      */
-    enum ResponseTypeEnum {
+    public enum ResponseTypeEnum {
         INFO,
         WARN,
         EXCEPTION,
@@ -78,9 +78,12 @@ public class CommonResponse implements Serializable {
 
     @Getter
     @AllArgsConstructor
-    enum CommonResponseCodeEnum {
+    public enum CommonResponseCodeEnum {
         SUCCESS("1", "success", ResponseTypeEnum.INFO),
         SERVICE_EXCEPTION("-1", "service_exception", ResponseTypeEnum.EXCEPTION),
+        PARAM_VALID_EXCEPTION("-2", "paramValidException", ResponseTypeEnum.EXCEPTION),
+        NULL_POINTER_EXCEPTION("-3", "nullPointerException", ResponseTypeEnum.EXCEPTION),
+        ENVIRONMENT_EXCEPTION("-4", "environmentException", ResponseTypeEnum.EXCEPTION),
         CUSTOM_EXCEPTION("-100", "custom_exception", ResponseTypeEnum.EXCEPTION),
         CUSTOM_MESSAGE_EXCEPTION("-101", "custom_message_exception", ResponseTypeEnum.EXCEPTION),
         ;

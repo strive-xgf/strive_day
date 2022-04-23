@@ -4,6 +4,7 @@ import com.xgf.bean.User;
 import com.xgf.bean.WorkInfo;
 import com.xgf.constant.reqrep.CommonDataRequest;
 import com.xgf.constant.reqrep.CommonDataResponse;
+import com.xgf.exception.CustomExceptionEnum;
 import com.xgf.randomstr.RandomStrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -41,6 +42,13 @@ public class DemoController {
         User user = req.getParam();
         user.setWorkInfo(WorkInfo.builder().workContent("generate workContent").workUuid(RandomStrUtil.createRandomStr(32)).build());
         return CommonDataResponse.ok(user);
+    }
+
+    @PostMapping(value = "/testException")
+    @ApiOperation(value = "测试异常", notes = "测试异常")
+    CommonDataResponse<Void> testException() {
+//        throw new NullPointerException();
+        throw CustomExceptionEnum.DATA_PARSE_EXCEPTION.generateException();
     }
 
 }

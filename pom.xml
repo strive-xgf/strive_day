@@ -41,6 +41,7 @@
 
         <aspectj.version>1.9.5</aspectj.version>
         <swagger2.version>2.6.1</swagger2.version>
+        <hibernate.validate.version>5.4.1.Final</hibernate.validate.version>
 
     </properties>
 
@@ -188,6 +189,12 @@
 <!--            <version>${aspectj.version}</version>-->
 <!--        </dependency>-->
 
+        <!-- validator 数据校验 -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate.validate.version}</version>
+        </dependency>
 
     </dependencies>
 
