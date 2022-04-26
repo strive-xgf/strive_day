@@ -1,12 +1,12 @@
 package com.xgf.constant.reqrep;
 
-import com.sun.istack.internal.NotNull;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author xgf
@@ -22,7 +22,7 @@ public class CommonDataRequest<T> extends CommonRequest {
     private static final long serialVersionUID = 898105900898255956L;
 
     @Valid
-    @NotNull
+    @NotNull(message = "CommonDataRequest 通用请求参数不能为空")
     @ApiModelProperty(value = "请求参数", required = true)
     private T param;
 

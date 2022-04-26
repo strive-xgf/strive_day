@@ -19,39 +19,39 @@ public class CommonDataResponse<T> extends CommonResponse {
     @ApiModelProperty("方法结果数据")
     private T data;
 
-    public static <V> CommonDataResponse<V> fail() {
+    public static <T> CommonDataResponse<T> fail() {
         return fail(CommonResponse.CommonResponseCodeEnum.SERVICE_EXCEPTION);
     }
 
-    public static <V> CommonDataResponse<V> fail(CommonResponseCodeEnum respEnum) {
-        return custom(CommonResponse.CommonResponseCodeEnum.SERVICE_EXCEPTION, null);
+    public static <T> CommonDataResponse<T> fail(CommonResponseCodeEnum respEnum) {
+        return custom(respEnum, null);
     }
 
-    public static <V> CommonDataResponse<V> fail(String responseMessage) {
+    public static <T> CommonDataResponse<T> fail(String responseMessage) {
         return custom(CommonResponse.CommonResponseCodeEnum.CUSTOM_MESSAGE_EXCEPTION.getCode(), responseMessage, CommonResponse.CommonResponseCodeEnum.SERVICE_EXCEPTION.getResponseTypeEnum(), null);
     }
 
-    public static <V> CommonDataResponse<V> ok() {
+    public static <T> CommonDataResponse<T> ok() {
         return ok(null);
     }
 
-    public static <V> CommonDataResponse<V> ok(V data) {
+    public static <T> CommonDataResponse<T> ok(T data) {
         return custom(CommonResponse.CommonResponseCodeEnum.SUCCESS, data);
     }
 
-    public static <V> CommonDataResponse<V> ok(String responseMessage, V data) {
+    public static <T> CommonDataResponse<T> ok(String responseMessage, T data) {
         return custom(CommonResponse.CommonResponseCodeEnum.CUSTOM_MESSAGE_EXCEPTION.getCode(), responseMessage, CommonResponse.CommonResponseCodeEnum.SUCCESS.getResponseTypeEnum(), data);
     }
 
     /**
      * 自定义
      */
-    public static <V> CommonDataResponse<V> custom(CommonResponseCodeEnum respEnum, V data) {
+    public static <T> CommonDataResponse<T> custom(CommonResponseCodeEnum respEnum, T data) {
         return custom(respEnum.getCode(), respEnum.getValue(), respEnum.getResponseTypeEnum(), data);
     }
 
-    public static <V> CommonDataResponse<V> custom(String responseCode, String responseMessage, ResponseTypeEnum responseType, V data) {
-        CommonDataResponse<V> result = new CommonDataResponse<V>();
+    public static <T> CommonDataResponse<T> custom(String responseCode, String responseMessage, ResponseTypeEnum responseType, T data) {
+        CommonDataResponse<T> result = new CommonDataResponse<T>();
         result.setResponseCode(responseCode);
         result.setResponseMessage(responseMessage);
         result.setResponseType(responseType);
