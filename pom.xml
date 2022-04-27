@@ -43,6 +43,9 @@
         <swagger2.version>2.6.1</swagger2.version>
         <hibernate.validate.version>5.4.1.Final</hibernate.validate.version>
 
+        <tk.mybatis>2.0.3</tk.mybatis>
+        <mysql.version>8.0.27</mysql.version>
+
     </properties>
 
 
@@ -194,6 +197,19 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate.validate.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+            <version>${mysql.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper-spring-boot-starter</artifactId>
+            <version>${tk.mybatis}</version>
         </dependency>
 
     </dependencies>
