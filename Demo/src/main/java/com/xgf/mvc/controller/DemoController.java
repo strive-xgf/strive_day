@@ -2,14 +2,19 @@ package com.xgf.mvc.controller;
 
 import com.xgf.bean.User;
 import com.xgf.bean.WorkInfo;
+import com.xgf.constant.page.CommonPageDataResponse;
+import com.xgf.constant.page.CommonPageRequest;
 import com.xgf.constant.reqrep.CommonDataRequest;
 import com.xgf.constant.reqrep.CommonDataResponse;
 import com.xgf.exception.CustomExceptionEnum;
+import com.xgf.mvc.bean.req.SearchUserReqDTO;
+import com.xgf.mvc.service.UserService;
 import com.xgf.randomstr.RandomStrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,6 +31,9 @@ import javax.validation.Valid;
 @RequestMapping(value = "/demo/demoController")
 @Api(description = "mvc_demo", tags = "demo_demoController")
 public class DemoController {
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping(value = "/printHello")
     @ApiOperation(value = "打印hello", notes = "打印hello")
@@ -49,6 +57,17 @@ public class DemoController {
     CommonDataResponse<Void> testException() {
 //        throw new NullPointerException();
         throw CustomExceptionEnum.DATA_PARSE_EXCEPTION.generateException();
+    }
+
+
+    @PostMapping(value = "/testPageCommon")
+    @ApiOperation(value = "测试分页", notes = "分页搜索User信息")
+    CommonPageDataResponse<User> testPageCommon(@RequestBody @Valid CommonPageRequest<SearchUserReqDTO> req) {
+//        return CommonPageDataResponse.fail();
+//        return CommonPageDataResponse.fail(CommonResponse.CommonResponseCodeEnum.PARAM_VALID_EXCEPTION);
+//        return CommonPageDataResponse.fail("testPageCommon 执行失败了，喔喔喔喔喔");
+
+        return CommonPageDataResponse.ok(userService.searchUserByPage(req.getParam().getUserCondition(), req.getPage()));
     }
 
 }
