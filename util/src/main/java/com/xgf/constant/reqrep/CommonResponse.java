@@ -80,12 +80,16 @@ public class CommonResponse implements Serializable {
     @AllArgsConstructor
     public enum CommonResponseCodeEnum {
         SUCCESS("1", "success", ResponseTypeEnum.INFO),
-        SERVICE_EXCEPTION("-1", "service_exception", ResponseTypeEnum.EXCEPTION),
+        SERVICE_EXCEPTION("-1", "serviceException", ResponseTypeEnum.EXCEPTION),
         PARAM_VALID_EXCEPTION("-2", "paramValidException", ResponseTypeEnum.EXCEPTION),
         NULL_POINTER_EXCEPTION("-3", "nullPointerException", ResponseTypeEnum.EXCEPTION),
         ENVIRONMENT_EXCEPTION("-4", "environmentException", ResponseTypeEnum.EXCEPTION),
-        CUSTOM_EXCEPTION("-100", "custom_exception", ResponseTypeEnum.EXCEPTION),
-        CUSTOM_MESSAGE_EXCEPTION("-101", "custom_message_exception", ResponseTypeEnum.EXCEPTION),
+        PARAM_TYPE_MISMATCH_EXCEPTION("-5", "paramTypeMismatchException", ResponseTypeEnum.EXCEPTION),
+        JSON_MAPPING_EXCEPTION("-6", "jsonMappingException", ResponseTypeEnum.EXCEPTION),
+        CUSTOM_EXCEPTION("-100", "customException", ResponseTypeEnum.EXCEPTION),
+        CUSTOM_MESSAGE_EXCEPTION("-101", "customMessageException", ResponseTypeEnum.EXCEPTION),
+        COMMON_PARAM_NULL_EXCEPTION("-200", "commonParamNullException", ResponseTypeEnum.EXCEPTION),
+        COMMON_RESULT_NULL_EXCEPTION("-201", "commonResultNullException", ResponseTypeEnum.EXCEPTION),
         ;
 
         private String code;
