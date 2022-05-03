@@ -1,5 +1,6 @@
 package com.xgf.mvc.service;
 
+import com.xgf.util.annotation.validate.ValidateCustomTestObject;
 import com.xgf.util.annotation.validate.ValidateTestObject;
 
 /**
@@ -12,4 +13,5 @@ public interface ValidateService {
 
     void testValidate(ValidateTestObject param);
 
+    void testCustomValidate(ValidateCustomTestObject param);
 }

@@ -3,6 +3,7 @@ package com.xgf.mvc.controller;
 import com.xgf.constant.reqrep.CommonDataRequest;
 import com.xgf.constant.reqrep.CommonResponse;
 import com.xgf.mvc.service.ValidateService;
+import com.xgf.util.annotation.validate.ValidateCustomTestObject;
 import com.xgf.util.annotation.validate.ValidateTestObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +35,13 @@ public class ValidateController {
     @ApiOperation(value = "测试预制验证器", notes = "测试预制验证器testValidate")
     CommonResponse testValidate(@RequestBody @Valid CommonDataRequest<ValidateTestObject> req){
         validateService.testValidate(req.getParam());
+        return CommonResponse.success();
+    }
+
+    @PostMapping(value = "/testCustomValidate")
+    @ApiOperation(value = "测试自定义验证器", notes = "测试自定义验证器testValidate")
+    CommonResponse testCustomValidate(@RequestBody @Valid CommonDataRequest<ValidateCustomTestObject> req){
+        validateService.testCustomValidate(req.getParam());
         return CommonResponse.success();
     }
 
