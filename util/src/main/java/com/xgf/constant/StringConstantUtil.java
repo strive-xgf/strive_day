@@ -25,8 +25,11 @@ public class StringConstantUtil {
     public static final String RIGHT_SMALL_BRACKET = ")";
     public static final String LEFT_MIDDLE_BRACKET = "[";
     public static final String RIGHT_MIDDLE_BRACKET = "]";
+    public static final String CHINESE_LEFT_MIDDLE_BRACKET = "【";
+    public static final String CHINESE_RIGHT_MIDDLE_BRACKET = "】";
     public static final String LEFT_BIG_BRACKET = "{";
     public static final String RIGHT_BIG_BRACKET = "}";
+    public static final String LINE_FEED = "\r\n";
 
     /**
      * 正则：数字
@@ -92,6 +95,14 @@ public class StringConstantUtil {
         return str.endsWith(sweepField) ? str.substring(0, str.length() - 1) : str;
     }
 
+    /**
+     * 拼接中文中括号
+     * @param str 拼接内容
+     * @return 添加中括号之后
+     */
+    public static String stringAppendChineseMidBracket(String str) {
+        return stringBuilderAppend(null, str, CHINESE_LEFT_MIDDLE_BRACKET, CHINESE_RIGHT_MIDDLE_BRACKET).toString();
+    }
 
     /**
      * 添加后缀

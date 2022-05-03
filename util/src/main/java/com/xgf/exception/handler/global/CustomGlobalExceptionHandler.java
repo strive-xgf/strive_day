@@ -4,10 +4,13 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.xgf.constant.StringConstantUtil;
 import com.xgf.constant.reqrep.CommonResponse;
 import com.xgf.exception.CustomException;
+import com.xgf.file.FileUtil;
+import com.xgf.task.TaskUtil;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -25,6 +28,8 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -81,6 +86,16 @@ public class CustomGlobalExceptionHandler {
 
 		// 设置错误提示信息
 		response.setResponseMessage(strJoin(errorType, errorInfo));
+
+		// 记录异常信息到文件中 todo 22-5-3 待完善
+		TaskUtil.runAsync(() -> {
+			try {
+				// 默认写入路径: 项目根路径 > log > 年 > 月 > 日 + 时.txt
+				FileUtil.fileAppendData(FileUtil.createFileBySysTime(), StringConstantUtil.LINE_FEED + getExceptionMessage(e));
+			} catch (Exception ex) {
+				log.error("====== CustomGlobalExceptionHandler save exception info log error, message = 【{}】", e.getLocalizedMessage(), e);
+			}
+		});
 
 		return response;
 	}
@@ -164,6 +179,25 @@ public class CustomGlobalExceptionHandler {
 		}
 
 		return ExceptionInfoAssembly.convert(response, errorInfo, errorType);
+	}
+
+
+	/**
+	 * 获取异常Exception的相信信息
+	 * @param e 异常
+	 * @return 异常详细信息
+	 */
+	public String getExceptionMessage(Exception e) {
+		// JDK1.7 try内流创建自动关闭
+		try {
+			StringWriter stringWriter = new StringWriter();
+			PrintWriter printWriter= new PrintWriter(stringWriter);
+			e.printStackTrace(printWriter);
+			StringBuffer buffer= stringWriter.getBuffer();
+			return buffer.toString();
+		} catch (Exception ex) {
+			throw new RuntimeException(e);
+		}
 	}
 
 
