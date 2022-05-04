@@ -3,6 +3,7 @@ package com.xgf.exception.handler.global;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.xgf.constant.StringConstantUtil;
 import com.xgf.constant.reqrep.CommonResponse;
+import com.xgf.date.DateUtil;
 import com.xgf.exception.CustomException;
 import com.xgf.file.FileUtil;
 import com.xgf.task.TaskUtil;
@@ -32,6 +33,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -88,10 +90,13 @@ public class CustomGlobalExceptionHandler {
 		response.setResponseMessage(strJoin(errorType, errorInfo));
 
 		// 记录异常信息到文件中 todo 22-5-3 待完善
+		String finalErrorType = errorType;
 		TaskUtil.runAsync(() -> {
 			try {
-				// 默认写入路径: 项目根路径 > log > 年 > 月 > 日 + 时.txt
-				FileUtil.fileAppendData(FileUtil.createFileBySysTime(), StringConstantUtil.LINE_FEED + getExceptionMessage(e));
+				// 默认写入路径: 项目根路径 > log > sysTimeLog > 年 > 月 > 日 + 时.txt
+				FileUtil.fileAppendData(FileUtil.createFileBySysTime(),
+						StringConstantUtil.LINE_FEED + DateUtil.dateFormatString(new Date(), DateUtil.FORMAT_MILL)
+								+ StringConstantUtil.stringAppendChineseMidBracket(finalErrorType) + StringConstantUtil.LINE_FEED + getExceptionMessage(e));
 			} catch (Exception ex) {
 				log.error("====== CustomGlobalExceptionHandler save exception info log error, message = 【{}】", e.getLocalizedMessage(), e);
 			}

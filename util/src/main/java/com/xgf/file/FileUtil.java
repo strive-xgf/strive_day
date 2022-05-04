@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Objects;
 import java.util.TimeZone;
 
 /**
@@ -28,7 +29,7 @@ public class FileUtil {
 
     /**
      * 根据系统时间，生成文件及其目录（.txt文件, 目录:项目根路径）
-     * @return 项目根路径 > log > 年 > 月 > 日 + 时.txt
+     * @return 项目根路径 > log > sysTimeLog > 年 > 月 > 日 + 时.txt
      */
     public static File createFileBySysTime() {
         return createFileBySysTime(null, null);
@@ -37,7 +38,7 @@ public class FileUtil {
     /**
      * 根据系统时间，生成文件及其目录（.txt文件）
      * @param basePath 根路径
-     * @return （根路径basePath(为空则是项目根路径) > log > 年 > 月 > 日 + 时.txt
+     * @return （根路径basePath(为空则是项目根路径) > log > sysTimeLog > 年 > 月 > 日 + 时.txt
      */
     public static File createFileBySysTime(String basePath) {
         return createFileBySysTime(basePath, null);
@@ -48,7 +49,7 @@ public class FileUtil {
      * 根据系统时间，生成文件及其目录
      * @param basePath 根路径
      * @param fileFormat 文件格式，默认 txt 文件
-     * @return （根路径basePath(为空则是项目根路径) > log > 年 > 月 > 日 + 时(.文件格式）
+     * @return （根路径basePath(为空则是项目根路径) > log > sysTimeLog > 年 > 月 > 日 + 时(.文件格式）
      */
     public static File createFileBySysTime(String basePath, String fileFormat) {
         if (StringUtils.isBlank(basePath)) {
@@ -64,7 +65,8 @@ public class FileUtil {
         Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT+08:00"));
 
         // 拼装路径 （根路径 > log > 年 > 月 > 日) + 时.txt
-        basePath = basePath + appendFileSeparator("log") + appendFileSeparator(c.get(Calendar.YEAR))
+        basePath = basePath + appendFileSeparator(StringConstantUtil.LOG) + appendFileSeparator(StringConstantUtil.SYS_TIME_LOG)
+                + appendFileSeparator(c.get(Calendar.YEAR))
                 + appendFileSeparator(c.get(Calendar.MONTH) + 1) + appendFileSeparator(c.get(Calendar.DAY_OF_MONTH))
                 + appendFileSeparator(c.get(Calendar.HOUR_OF_DAY))
                 + StringConstantUtil.DOT + (StringUtils.isBlank(fileFormat) ? FILE_FORMAT : fileFormat);
@@ -97,6 +99,10 @@ public class FileUtil {
      * @return 分隔符 + str
      */
     private static String appendFileSeparator(Object str) {
+        if (Objects.isNull(str)) {
+            return StringConstantUtil.EMPTY;
+        }
+
         return SystemUtil.getFileSeparator() + String.valueOf(str);
     }
 

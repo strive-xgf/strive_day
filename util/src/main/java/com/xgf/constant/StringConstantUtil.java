@@ -30,6 +30,8 @@ public class StringConstantUtil {
     public static final String LEFT_BIG_BRACKET = "{";
     public static final String RIGHT_BIG_BRACKET = "}";
     public static final String LINE_FEED = "\r\n";
+    public static final String LOG = "log";
+    public static final String SYS_TIME_LOG = "sysTimeLog";
 
     /**
      * 正则：数字
