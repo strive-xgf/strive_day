@@ -394,6 +394,18 @@ public class DateUtil {
         }
         return new TimeUnit(days, hours, minutes, seconds, millis, sb.toString());
     }
+
+    /**
+     * 获取特殊值 Date 类型认为是 null 空值的情况
+     * @return 0000-01-01 00:00:00.000 的 Date 时间
+     */
+    public static Date getDateNullInstance() {
+        try {
+            return (new SimpleDateFormat(FORMAT_MILL)).parse("0000-01-01 00:00:00.000");
+        } catch (ParseException var1) {
+            return null;
+        }
+    }
 }
 
 /**
