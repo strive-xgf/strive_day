@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
@@ -171,18 +172,46 @@ public class CommonCheckCompareDataTest {
         data.checkData();
     }
 
-    @Test
-    public void test_checkDataTypeDiff_ThenThrow() {
+//    @Test
+//    public void test_checkDataTypeDiff_ThenThrow() {
+//
+//        // 校验的两个字段类型不一样（eg:校验值的类型不一致: java.lang.Integer  <>  java.math.BigDecimal）
+//        CommonCheckCompareData data = new CommonCheckCompareData();
+//        data.setColumnEntry(DataEntry.valueOf("a", "b"));
+//        data.setOperatorEnum(CompareOperatorEnum.NEQ);
+//        CompareDataObject<? extends Number> compareDataObject = CompareDataObject.valueOf(30, new BigDecimal("30"));
+//        data.setCheckObject(compareDataObject);
+//
+//        thrown.expectMessage("校验值的类型不一致: " + Objects.requireNonNull(CommonReflectUtil.getFieldValue(compareDataObject, "a")).getClass().getName()
+//                + "  <>  " + Objects.requireNonNull(CommonReflectUtil.getFieldValue(compareDataObject, "b")).getClass().getName());
+//        data.checkData();
+//    }
 
-        // 校验的两个字段类型不一样（eg:校验值的类型不一致: java.lang.Integer  <>  java.math.BigDecimal）
+
+    @Test
+    public void test_checkDataTypeDiffEQ() {
+
+        // 校验的两个字段类型不一样但是值一样的情况
+        CommonCheckCompareData data = new CommonCheckCompareData();
+        data.setColumnEntry(DataEntry.valueOf("a", "b"));
+        data.setOperatorEnum(CompareOperatorEnum.EQ);
+        CompareDataObject<? extends Number> compareDataObject = CompareDataObject.valueOf(30.678, new BigDecimal("30.678"));
+        data.setCheckObject(compareDataObject);
+
+        data.checkData();
+    }
+
+    @Test
+    public void test_checkDataTypeDiffNEQ_ThenThrow() {
+
+        // 校验的两个字段类型不一样但是值一样的情况
         CommonCheckCompareData data = new CommonCheckCompareData();
         data.setColumnEntry(DataEntry.valueOf("a", "b"));
         data.setOperatorEnum(CompareOperatorEnum.NEQ);
-        CompareDataObject<? extends Number> compareDataObject = CompareDataObject.valueOf(30, new BigDecimal("30"));
+        CompareDataObject<? extends Serializable> compareDataObject = CompareDataObject.valueOf("6666666666.9898989898", new BigDecimal("6666666666.9898989898"));
         data.setCheckObject(compareDataObject);
 
-        thrown.expectMessage("校验值的类型不一致: " + Objects.requireNonNull(CommonReflectUtil.getFieldValue(compareDataObject, "a")).getClass().getName()
-                + "  <>  " + Objects.requireNonNull(CommonReflectUtil.getFieldValue(compareDataObject, "b")).getClass().getName());
+        thrown.expectMessage("不满足条件: 6666666666.9898989898 != 6666666666.9898989898");
         data.checkData();
     }
 

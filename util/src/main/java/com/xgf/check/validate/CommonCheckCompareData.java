@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.xgf.check.CompareOperatorEnum;
 import com.xgf.constant.CommonNullConstantUtil;
 import com.xgf.constant.DataEntry;
+import com.xgf.constant.StringConstantUtil;
 import com.xgf.exception.CustomExceptionEnum;
 import com.xgf.reflect.CommonReflectUtil;
 import lombok.Data;
@@ -138,6 +139,11 @@ public class CommonCheckCompareData {
 
         }else if(o1 instanceof String && o2 instanceof String){
             compareFlag = CompareOperatorEnum.compareOperator(((String) o1).compareTo((String)o2), param.operatorEnum);
+
+        } else if (StringConstantUtil.checkStrIsFloatNumber(String.valueOf(o1)) && StringConstantUtil.checkStrIsFloatNumber(String.valueOf(o2))) {
+            // 兼容两种数值类型（正则表达式匹配浮点数），数据类型不一致（eg: Integer, Double）导致的比较抛出异常
+            // 这里数值类型全部转换为 BigDecimal 进行比较 todo: 是否直接String比较
+            compareFlag = CompareOperatorEnum.compareOperator(new BigDecimal(String.valueOf(o1)).compareTo(new BigDecimal(String.valueOf(o2))), param.operatorEnum);
 
         } else if(o1 instanceof Comparable && o2 instanceof Comparable){
             try {
