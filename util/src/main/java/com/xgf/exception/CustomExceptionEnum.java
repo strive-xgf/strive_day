@@ -19,6 +19,7 @@ public enum CustomExceptionEnum implements EnumBase {
     PARAM_TYPE_ILLEGAL_EXCEPTION("paramTypeIllegalException", "参数类型不合法异常"),
     ENUM_TYPE_ILLEGAL_EXCEPTION("enumTypeIllegalException", "枚举类型不合法"),
     DATA_PARSE_EXCEPTION("dataParseException", "数据解析异常"),
+    DATA_CONVERT_EXCEPTION("dataConvertException", "数据转换异常"),
     REFLECT_EXCEPTION("reflectException", "反射处理异常"),
     CUSTOM_PARAM_VALIDATOR_NULL_EXCEPTION("customParamValidatorNullException", "参数校验字段不存在"),
     FILE_CREATE_EXCEPTION("fileCreateException", "文件创建异常"),
