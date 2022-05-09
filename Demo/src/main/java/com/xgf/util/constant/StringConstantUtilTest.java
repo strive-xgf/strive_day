@@ -4,6 +4,7 @@ import com.xgf.constant.StringConstantUtil;
 import com.xgf.randomstr.RandomStrUtil;
 import org.junit.Test;
 
+import javax.validation.constraints.AssertTrue;
 import java.util.List;
 
 /**
@@ -65,6 +66,23 @@ public class StringConstantUtilTest {
         String str = "abilKjs";
 //        String str = "abilKjs.";
         System.out.println(str + " is letter = " + StringConstantUtil.checkStrIsLetter(str));
+    }
+
+    @Test
+    public void testC() {
+        String str = "123456789.987654321";
+        System.out.println(str + "\t" + StringConstantUtil.checkStrIsFloatNumber(str));
+        str = "123456789123456789123456789.987654321987654321987654321";
+        System.out.println(str + "\t" + StringConstantUtil.checkStrIsFloatNumber(str));
+        str = "123456789123456789123456789123456789123456789123456789123456789123456789123456789.987654321987654321987654321987654321987654321987654321987654321987654321987654321";
+        System.out.println(str + "\t" + StringConstantUtil.checkStrIsFloatNumber(str));
+        str = "-123456789123456789123456789.987654321987654321987654321";
+        System.out.println(str + "\t" + StringConstantUtil.checkStrIsFloatNumber(str));
+        str = "--123456789123456789123456789.987654321987654321987654321";
+        System.out.println(str + "\t" + StringConstantUtil.checkStrIsFloatNumber(str));
+        str = "123456789123456789123456789.98765432198765.4321987654321";
+        System.out.println(str + "\t" + StringConstantUtil.checkStrIsFloatNumber(str));
+
     }
 
 

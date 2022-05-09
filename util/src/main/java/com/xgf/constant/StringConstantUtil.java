@@ -48,6 +48,11 @@ public class StringConstantUtil {
      */
     public static final String MATCH_ALL_LETTER = "^[a-zA-Z]+$";
 
+    /**
+     * 正则：浮点数
+     */
+    public static final String MATCH_FLOAT_NUMBER = "^(-?\\d+)(\\.\\d+)?$";
+
 
 
 
@@ -179,16 +184,14 @@ public class StringConstantUtil {
 
 
 
-        /**
-         * 校验字符串全为数字
-         * @param str 字符串
-         * @return true: 全数字
-         */
+    /**
+     * 校验字符串全为数字
+     * @param str 字符串
+     * @return true: 全数字
+     */
     public static boolean checkStrIsNumber(String str){
-        if (str == null) {
-            return false;
-        }
-        return str.matches(MATCH_ALL_NUMBER);
+        return checkStrIsMatches(str, MATCH_ALL_NUMBER);
+
     }
 
     /**
@@ -197,10 +200,8 @@ public class StringConstantUtil {
      * @return true: 全数字
      */
     public static boolean checkStrIsNumberContainNegative(String str){
-        if (str == null) {
-            return false;
-        }
-        return str.matches(MATCH_ALL_NUMBER_CONTAIN_NEGATIVE);
+        return checkStrIsMatches(str, MATCH_ALL_NUMBER_CONTAIN_NEGATIVE);
+
     }
 
     /**
@@ -209,10 +210,33 @@ public class StringConstantUtil {
      * @return true: 全字母
      */
     public static boolean checkStrIsLetter(String str){
+        return checkStrIsMatches(str, MATCH_ALL_LETTER);
+
+    }
+
+
+    /**
+     * 校验字符串是否为浮点数
+     * @param str 字符串
+     * @return true: 浮点数
+     */
+    public static boolean checkStrIsFloatNumber(String str){
+        return checkStrIsMatches(str, MATCH_FLOAT_NUMBER);
+
+    }
+
+    /**
+     * 校验字符串是否符合正则表达式
+     * @param str 字符串
+     * @param regex 正则表达式
+     * @return true: 符合
+     */
+    public static boolean checkStrIsMatches(String str, String regex) {
         if (str == null) {
             return false;
         }
-        return str.matches(MATCH_ALL_LETTER);
+
+        return str.matches(regex);
     }
 
 
