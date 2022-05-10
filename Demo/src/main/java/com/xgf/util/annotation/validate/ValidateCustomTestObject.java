@@ -3,6 +3,8 @@ package com.xgf.util.annotation.validate;
 import com.xgf.annotation.validate.CheckEnum;
 import com.xgf.annotation.validate.CheckEnumList;
 import com.xgf.annotation.validate.CheckNumberValueAnnotation;
+import com.xgf.annotation.validate.CommonCompareAnnotation;
+import com.xgf.check.CompareOperatorEnum;
 import com.xgf.exception.CustomExceptionEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -25,7 +27,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel("自定义验证器测试类")
+@CommonCompareAnnotation(checkColumn = "compare1", conditionColumn = "compare2", operator = CompareOperatorEnum.EQ,
+//        checkColumnFieldDesc = "校验列描述compare1", conditionColumnFieldDesc = "条件列描述compare2",
+        dealSpecialValueFlag = true)
 public class ValidateCustomTestObject {
+
+
+    @ApiModelProperty(value = "compare 比较值1", example = "9999.999")
+    private BigDecimal compare1;
+
+    @ApiModelProperty(value = "compare 比较值2", example = "9999.999")
+    private String compare2;
+
 
     @CheckEnum(enumClass = CustomExceptionEnum.class)
     @ApiModelProperty(value = "异常code值", example = "paramValueCanNotNullException")

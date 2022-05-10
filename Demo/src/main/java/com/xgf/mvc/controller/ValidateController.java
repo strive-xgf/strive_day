@@ -25,7 +25,7 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @RequestMapping(value = "/demo/validateController")
-@Api(description = "mvc_validate", tags = "demo_validateController")
+@Api(description = "demo_validateController", tags = "demo_validateController")
 public class ValidateController {
 
     @Autowired

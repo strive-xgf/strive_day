@@ -18,36 +18,37 @@ public enum CompareOperatorEnum implements EnumBase {
     /**
      * 等于
      */
-    EQ("eq", " = "),
+    EQ("eq", " = ", "等于"),
 
     /**
      * 不等于
      */
-    NEQ("neq", " != "),
+    NEQ("neq", " != ", "不等于"),
 
     /**
      * 大于
      */
-    GT("gt", " > "),
+    GT("gt", " > ", "大于"),
 
     /**
      * 大于等于
      */
-    GTE("gte", " >= "),
+    GTE("gte", " >= ", "大于等于"),
 
     /**
      * 小于
      */
-    LT("lt", " < "),
+    LT("lt", " < ", "小于"),
 
     /**
      * 小于等于
      */
-    LTE("lte", " <= "),
+    LTE("lte", " <= ", "小于等于"),
     ;
 
     private String code;
     private String value;
+    private String desc;
 
     /**
      * 比较结果，与当前枚举进行对比，
