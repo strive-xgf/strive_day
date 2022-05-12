@@ -46,6 +46,7 @@
         <tk.mybatis>2.0.3</tk.mybatis>
         <mysql.version>8.0.27</mysql.version>
 
+        <belerweb.pinyin4j>2.5.0</belerweb.pinyin4j>
     </properties>
 
 
@@ -210,6 +211,13 @@
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-spring-boot-starter</artifactId>
             <version>${tk.mybatis}</version>
+        </dependency>
+
+        <!-- 汉字转拼音（不支持多音字处理） -->
+        <dependency>
+            <groupId>com.belerweb</groupId>
+            <artifactId>pinyin4j</artifactId>
+            <version>${belerweb.pinyin4j}</version>
         </dependency>
 
     </dependencies>

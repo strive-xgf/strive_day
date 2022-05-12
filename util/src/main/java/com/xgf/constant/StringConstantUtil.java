@@ -53,6 +53,11 @@ public class StringConstantUtil {
      */
     public static final String MATCH_FLOAT_NUMBER = "^(-?\\d+)(\\.\\d+)?$";
 
+    /**
+     * 正则: 匹配汉字（中文字符）
+     */
+    public static final String MATCH_CHINESE = "[\\u4E00-\\u9FA5]+";
+
 
 
 
@@ -222,6 +227,17 @@ public class StringConstantUtil {
      */
     public static boolean checkStrIsFloatNumber(String str){
         return checkStrIsMatches(str, MATCH_FLOAT_NUMBER);
+
+    }
+
+
+    /**
+     * 校验字符串是否全为中文汉字
+     * @param str 字符串
+     * @return true: 汉字全匹配
+     */
+    public static boolean checkStrIsChinese(String str){
+        return checkStrIsMatches(str, MATCH_CHINESE);
 
     }
 
