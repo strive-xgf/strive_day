@@ -47,6 +47,7 @@
         <mysql.version>8.0.27</mysql.version>
 
         <belerweb.pinyin4j>2.5.0</belerweb.pinyin4j>
+        <stuxuhai.jpinyin>1.1.8</stuxuhai.jpinyin>
     </properties>
 
 
@@ -218,6 +219,14 @@
             <groupId>com.belerweb</groupId>
             <artifactId>pinyin4j</artifactId>
             <version>${belerweb.pinyin4j}</version>
+        </dependency>
+
+        <!-- 处理多音字的问题） -->
+        <dependency>
+            <groupId>com.github.stuxuhai</groupId>
+            <artifactId>jpinyin</artifactId>
+            <version>${stuxuhai.jpinyin}</version>
+
         </dependency>
 
     </dependencies>
