@@ -406,6 +406,22 @@ public class DateUtil {
             return null;
         }
     }
+
+    /**
+     * 获取当前时间的第二天早上 6 点的时间
+     */
+    public static Date getNextDaySixClock() {
+        Calendar result = Calendar.getInstance();
+        result.setTime(DateUtil.addDay(new Date(), 1));
+        result.set(Calendar.DATE, result.get(Calendar.DATE) + 1);
+        result.set(Calendar.HOUR_OF_DAY, 6);
+        result.set(Calendar.MINUTE, 0);
+        result.set(Calendar.SECOND, 0);
+        result.set(Calendar.MILLISECOND, 0);
+        return result.getTime();
+    }
+
+
 }
 
 /**

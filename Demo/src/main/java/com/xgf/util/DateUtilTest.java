@@ -44,4 +44,12 @@ public class DateUtilTest {
 
         System.out.println(DateUtil.getChineseDate(new Date(), DateUtil.FORMAT_SECOND_CN));
     }
+
+
+    @Test
+    public void testGetNextDaySixClock() {
+        System.out.println(DateUtil.dateFormatString(DateUtil.getNextDaySixClock(), DateUtil.FORMAT_MILL));
+        System.out.println(DateUtil.getNextDaySixClock().getTime());
+    }
+
 }
