@@ -1,7 +1,7 @@
 package com.xgf.util;
 
 import com.xgf.collection.AssemblyUtil;
-import com.xgf.designpattern.structure.Proxy.Employee;
+import com.xgf.designpattern.structure.proxy.Employee;
 import org.junit.Test;
 
 import java.util.*;
