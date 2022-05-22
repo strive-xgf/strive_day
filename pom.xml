@@ -48,6 +48,7 @@
 
         <belerweb.pinyin4j>2.5.0</belerweb.pinyin4j>
         <stuxuhai.jpinyin>1.1.8</stuxuhai.jpinyin>
+        <apache.poi>3.17</apache.poi>
     </properties>
 
 
@@ -227,6 +228,18 @@
             <artifactId>jpinyin</artifactId>
             <version>${stuxuhai.jpinyin}</version>
 
+        </dependency>
+
+        <!--读取excel文件-->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${apache.poi}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${apache.poi}</version>
         </dependency>
 
     </dependencies>

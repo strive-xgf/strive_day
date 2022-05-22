@@ -23,6 +23,7 @@ public enum CustomExceptionEnum implements EnumBase {
     REFLECT_EXCEPTION("reflectException", "反射处理异常"),
     CUSTOM_PARAM_VALIDATOR_NULL_EXCEPTION("customParamValidatorNullException", "参数校验字段不存在"),
     FILE_CREATE_EXCEPTION("fileCreateException", "文件创建异常"),
+    FILE_DOWNLOAD_EXCEPTION("fileDownloadException", "文件下载异常"),
     CUSTOM_CHECK_DATA_ILLEGAL_EXCEPTION("customCheckDataIllegalException", "自定义校验数据非法异常"),
     ;
 
