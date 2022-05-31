@@ -13,14 +13,41 @@ import java.util.stream.Collectors;
 /**
  * @author xgf
  * @create 2021-11-10 00:01
- * @description 创建随机对象工具类
+ * @description 创建随机对象工具类，对象得有对应的set方法，否则赋值为null
  **/
 
 
 @Slf4j
 public class CreateRandomObjectUtil {
 
+    /**
+     * 创建随机数组默认数组大小
+     */
+    public static final int DEFAULT_SIZE = 10;
+
+
     private static final String DEFAULT_RANDOM_STRING = "1234567890";
+
+
+    public static <T> List<T> createDataList(Class<T> classObject) {
+        return createDataList(classObject, DEFAULT_SIZE);
+    }
+
+    /**
+     * 创建随机对象数组
+     *
+     * @param classObject class
+     * @param size 数组大小
+     * @param <T> 泛型
+     * @return List<T>
+     */
+    public static <T> List<T> createDataList(Class<T> classObject, int size) {
+        List<T> resultList = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            resultList.add(createData(classObject));
+        }
+        return resultList;
+    }
 
     /**
      * 创建对象并给字段随机赋值

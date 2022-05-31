@@ -49,6 +49,17 @@ public class CommonCommonReflectUtilTest {
 
     }
 
+    @Test
+    public void testGetAllFieldByNameDistinct() {
+
+        List<Field> allField = CommonReflectUtil.getAllField(RA.class);
+        System.out.println(allField.stream().map(Field::getName).collect(Collectors.toList()) + " >>> " + allField);
+        System.out.println("\n>>>>>>>>>");
+        List<Field> distinctFieldList = CommonReflectUtil.getAllFieldByNameDistinct(RA.class);
+        System.out.println(distinctFieldList.stream().map(Field::getName).collect(Collectors.toList()) + " >>> " + distinctFieldList);
+
+    }
+
 
     @Test
     public void testGetFieldValue() {

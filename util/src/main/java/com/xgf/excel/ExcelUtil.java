@@ -1,30 +1,81 @@
 package com.xgf.excel;
 
 import com.xgf.constant.StringConstantUtil;
+import com.xgf.excel.bean.ExcelDataParam;
+import com.xgf.excel.bean.ExcelWorkbookUtil;
 import com.xgf.excel.constant.ExcelConstant;
 import com.xgf.exception.CustomExceptionEnum;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author xgf
  * @create 2022-05-16 00:52
- * @description apache poi 封装 Excel 工具类
+ * @description apache poi 封装 Excel 工具类，外部直接使用工具类
  **/
 
 
 public class ExcelUtil {
 
     protected final static transient Logger log = LoggerFactory.getLogger(ExcelUtil.class);
+
+
+
+    /**
+     * 基于SXSSFWorkbook将数据写到指定路径的excel文件中【注意原文件有值，则清空覆盖】
+     */
+    public static boolean writeDataToExcelFile(List<?> dataList, Class<?> dataClz, int dataSizeLimit, String filePath) {
+        return writeDataToExcelFile(dataList, dataClz, dataSizeLimit, filePath, ExcelConstant.DEFAULT_START_ROW, ExcelConstant.DEFAULT_START_CELL);
+    }
+
+    /**
+     * 基于SXSSFWorkbook将数据写到指定路径的excel文件中【注意原文件有值，则清空覆盖】
+     * 数据集合为空则只写标题列
+     *
+     * @param dataList 数据集合
+     * @param dataClz 数据类型
+     * @param dataSizeLimit 数据量限制大小
+     * @param filePath 文件路径
+     * @param startRow excel 文件写入开始行
+     * @param startCell excel 文件写入开始列
+     * @return true: 写入成功， false: 写入失败
+     */
+    public static boolean writeDataToExcelFile(List<?> dataList, Class<?> dataClz, int dataSizeLimit, String filePath, int startRow, int startCell) {
+        long startTime = System.currentTimeMillis();
+        try {
+            // 默认从第0行第0列开始，所以输入行列要减1，为负数，会兼容为0
+            SXSSFWorkbook workbook = ExcelWorkbookUtil.convertData2WorkBook(ExcelDataParam.valueOf(dataList, dataClz, dataSizeLimit, startRow-1, startCell-1));
+            if (Objects.isNull(workbook)) {
+                log.warn("====== {} writeDataToExcelFile workbook result is null", log.getName());
+                return false;
+            }
+
+            //  JDK1.7 之后，try语句内创建的流将会自动关闭，不需要显式的关闭流 close
+            OutputStream out = new FileOutputStream(filePath, Boolean.FALSE);
+            workbook.write(out);
+        } catch (Exception e) {
+            log.warn("====== {} writeDataToExcelFile error message = {}", log.getName(), e.getLocalizedMessage(), e);
+            return false;
+        }finally {
+            log.info("====== {} writeDataToExcelFile cost = {} ms", log.getName(), System.currentTimeMillis() - startTime);
+        }
+        return true;
+
+    }
 
     /**
      * 根据文件路径 + 扩展信息 下载excel模板（页面点击下载模板，传入路径，实现直接下载功能）

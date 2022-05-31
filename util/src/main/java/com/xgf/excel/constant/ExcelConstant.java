@@ -39,4 +39,20 @@ public class ExcelConstant {
     public static final int EXPORT_MAX_COLUMN_SIZE = 10000;
 
 
+    /**
+     * 默认excel文档开始行（标题行）
+     */
+    public static final int DEFAULT_START_ROW = 0;
+
+    /**
+     * 默认excel文档开始列
+     */
+    public static final int DEFAULT_START_CELL = 0;
+
+    /**
+     * SXSSFWorkbook 保存在内存中的默认数据大小，其它的数据都会写到磁盘里，来减少占用的内存
+     */
+    public static final int DEFAULT_MEMORY_LOAD_SIZE = 5000;
+
+
 }

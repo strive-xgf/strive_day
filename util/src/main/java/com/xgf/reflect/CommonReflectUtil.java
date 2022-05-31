@@ -1,5 +1,6 @@
 package com.xgf.reflect;
 
+import com.xgf.collection.AssemblyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -47,12 +48,36 @@ public class CommonReflectUtil {
      */
     public static List<Field> getAllField(Object obj) {
 
+        return getAllField(obj.getClass());
+    }
+
+    /**
+     * 反射获取所有字段信息（包含继承父类）
+     * 注意：会存在重复字段名（父类子类都有的属性字段）
+     *
+     * @param clz class 对象
+     * @return 所有字段信息
+     */
+    public static List<Field> getAllField(Class<?> clz) {
         List<Field> fieldList = new ArrayList<>();
         // 从当前对象往上遍历到 Object 对象，获取所有的字段信息
-        for (Class<?> clz = obj.getClass(); clz != Object.class; clz = clz.getSuperclass()) {
+        for (; clz != Object.class; clz = clz.getSuperclass()) {
             fieldList.addAll(Arrays.asList(clz.getDeclaredFields()));
         }
         return fieldList;
+    }
+
+    /**
+     * 反射获取所有字段信息（包含继承父类）【通过名称字段去重】
+     *
+     * @param clz class 对象
+     * @return 去除重复字段后的所有字段信息
+     */
+    public static List<Field> getAllFieldByNameDistinct(Class<?> clz) {
+        return Optional.of(getAllField(clz)).orElseGet(ArrayList::new).stream()
+                .filter(Objects::nonNull)
+                .filter(AssemblyUtil.distinctByCondition(Field::getName))
+                .collect(Collectors.toList());
     }
 
     /**
