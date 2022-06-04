@@ -5,6 +5,7 @@ import com.xgf.excel.bean.ExcelDataParam;
 import com.xgf.excel.bean.ExcelWorkbookUtil;
 import com.xgf.excel.constant.ExcelConstant;
 import com.xgf.exception.CustomExceptionEnum;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -19,8 +20,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author xgf
@@ -34,6 +37,80 @@ public class ExcelUtil {
     protected final static transient Logger log = LoggerFactory.getLogger(ExcelUtil.class);
 
 
+    /**
+     * 导出数据到 HttpServletResponse 响应中，页面直接下载对应的excel文件
+     *
+     * @param resp     HttpServletResponse
+     * @param dataList 数据集合
+     * @param fileName 导出文件名
+     */
+    public static void exportExcelData(HttpServletResponse resp, List<?> dataList, String fileName) {
+        Class<?> dataClz = Optional.ofNullable(dataList).orElseThrow(CustomExceptionEnum.PARAM_VALUE_CAN_NOT_NULL_EXCEPTION::generateException)
+                .stream()
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElseThrow(CustomExceptionEnum.PARAM_VALUE_CAN_NOT_NULL_EXCEPTION::generateException)
+                .getClass();
+
+        exportExcelData(resp, dataList, dataClz, dataList.size(), ExcelConstant.DEFAULT_START_ROW, ExcelConstant.DEFAULT_START_CELL, fileName);
+    }
+
+    /**
+     * 导出 excel 标题行（无数据，字段名称（注解名称优先）的标题行）
+     *
+     * @param resp HttpServletResponse
+     * @param dataClz 数据类型
+     * @param fileName 导出文件名
+     */
+    public static void exportExcelTitle(HttpServletResponse resp, Class<?> dataClz, String fileName) {
+        exportExcelData(resp, new ArrayList<>(), dataClz, 1, ExcelConstant.DEFAULT_START_ROW, ExcelConstant.DEFAULT_START_CELL, fileName);
+    }
+
+
+    /**
+     * 导出数据到 HttpServletResponse 响应中，页面直接下载对应的excel文件
+     *
+     * @param resp          HttpServletResponse
+     * @param dataList      数据集合
+     * @param dataClz       数据类型
+     * @param dataSizeLimit 数据量限制大小
+     * @param startRow      excel 文件写入开始行
+     * @param startCell     excel 文件写入开始列
+     * @param fileName      文件名（导出时的文件名称）
+     */
+    public static void exportExcelData(HttpServletResponse resp, List<?> dataList, Class<?> dataClz, int dataSizeLimit, int startRow, int startCell, String fileName) {
+
+        long startTime = System.currentTimeMillis();
+        try {
+            // 下载文件名: template_ + 文件名
+            String downloadFileName = URLEncoder.encode(StringUtils.isBlank(fileName) ? "strive_day下载" : fileName, "UTF-8");
+
+            // 设置响应头 Content-disposition 是 MIME 协议的扩展，MIME 协议指示 MIME 用户代理如何显示附加的文件。当 Internet Explorer 接收到头时，它会激活文件下载对话框，它的文件名框自动填充了头中指定的文件名。（请注意，这是设计导致的；无法使用此功能将文档保存到用户的计算机上，而不向用户询问保存位置。）
+            //Content-disposition：以什么格式打开响应体数据（inline默认当前页面打开；attachment;filename=xxx 以附件形式打开响应体，文件下载）
+            resp.setHeader("Content-Disposition", "attachment; filename=" + downloadFileName + ExcelConstant.EXCEL_XLSX);
+
+            // 设置字符编码格式
+            resp.setCharacterEncoding("utf-8");
+            // 是文件，统一标识流格式（不知道文件是什么格式，统一设置为）
+            resp.setContentType("application/octet-stream");
+
+            // 响应输出流
+            ServletOutputStream os = resp.getOutputStream();
+
+            // 默认从第0行第0列开始，所以输入行列要减1，为负数，会兼容为0
+            SXSSFWorkbook workbook = ExcelWorkbookUtil.convertData2WorkBook(ExcelDataParam.valueOf(dataList, dataClz, dataSizeLimit, startRow - 1, startCell - 1));
+
+            workbook.write(os);
+            os.flush();
+            os.close();
+
+        } catch (Exception e) {
+            log.error("====== {}, exportExcelData Exception message = {}", log.getName(), e.getLocalizedMessage(), e);
+            throw CustomExceptionEnum.FILE_DOWNLOAD_EXCEPTION.generateException(e.getLocalizedMessage());
+        } finally {
+            log.info("====== {}, exportExcelData cost = {} ms", log.getName(), System.currentTimeMillis() - startTime);
+        }
+    }
 
     /**
      * 基于SXSSFWorkbook将数据写到指定路径的excel文件中【注意原文件有值，则清空覆盖】
