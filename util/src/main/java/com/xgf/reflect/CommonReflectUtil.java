@@ -4,7 +4,11 @@ import com.xgf.collection.AssemblyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -189,6 +193,63 @@ public class CommonReflectUtil {
         } catch (IllegalArgumentException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * 反射设置指定对象的指定属性指定值
+     *
+     * @param field 字段信息
+     * @param obj 目标对象
+     * @param fieldValue 目标值
+     */
+    public static void setFieldValue(Field field, Object obj, Object fieldValue) {
+        if (field == null) {
+            return;
+        }
+
+        try {
+            field.setAccessible(true);
+            field.set(obj, fieldValue);
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public static <T> T createInstance(Class<T> clz) {
+        try {
+            return clz.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            log.error("====== {} createInstance error message = {}", log.getName(), e.getLocalizedMessage(), e);
+            return null;
+        }
+    }
+
+
+    public static Map<String, Object> getAllFieldName2ValueMap(Object o) {
+        if (o == null) {
+            return null;
+        }
+
+        Map<String, Object> fieldName2ValueMap = new HashMap<>();
+
+        try {
+            BeanInfo beanInfo = Introspector.getBeanInfo(o.getClass());
+            PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+
+            for (PropertyDescriptor currentProperty : propertyDescriptors) {
+                String key = currentProperty.getName();
+                if (!"class".equals(key)) {
+                    Method getter = currentProperty.getReadMethod();
+                    Object value = getter.invoke(o);
+                    fieldName2ValueMap.put(key, value);
+                }
+            }
+
+        } catch (Exception e) {
+            log.error("====== {} getAllFieldName2ValueMap error message = {}", log.getName(), e.getLocalizedMessage(), e);
+        }
+        return fieldName2ValueMap;
     }
 
 

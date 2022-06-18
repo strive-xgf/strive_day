@@ -1,15 +1,15 @@
 package com.xgf.util.reflect;
 
 import com.alibaba.fastjson.JSON;
+import com.xgf.bean.User;
+import com.xgf.create.CreateRandomObjectUtil;
 import com.xgf.reflect.CommonReflectUtil;
 import lombok.Data;
 import org.apache.commons.collections.MapUtils;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
@@ -114,6 +114,18 @@ public class CommonCommonReflectUtilTest {
         assertEquals("CC", ra.getCc());
 
     }
+
+    @Test
+    public void testGetAllFieldName2ValueMap() {
+        User user = new User();
+        Map<String, Object> map = CommonReflectUtil.getAllFieldName2ValueMap(user);
+        System.out.println(map);
+
+        User user2 = CreateRandomObjectUtil.createData(User.class);
+        Map<String, Object> map2 = CommonReflectUtil.getAllFieldName2ValueMap(user2);
+        System.out.println(map2);
+    }
+
 
 
 

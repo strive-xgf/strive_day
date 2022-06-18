@@ -27,6 +27,7 @@ public class UserDTO {
     private Hobby hobby;
     private Integer age;
     private Double balance;
+    private Double balance2;
     private BigDecimal bigDecimal;
     private Date createdTime;
     private Date updatedTime;

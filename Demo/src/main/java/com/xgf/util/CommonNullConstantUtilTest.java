@@ -1,7 +1,9 @@
 package com.xgf.util;
 
 import com.xgf.bean.User;
+import com.xgf.bean.UserDTO;
 import com.xgf.constant.CommonNullConstantUtil;
+import com.xgf.create.CreateRandomObjectUtil;
 import com.xgf.date.DateUtil;
 import org.junit.Test;
 
@@ -104,6 +106,27 @@ public class CommonNullConstantUtilTest {
         System.out.println(Double.class.getSimpleName() + "  >>> get specialValue : " + CommonNullConstantUtil.getSpecialValueByClassType(Double.class));
         System.out.println(BigDecimal.class.getSimpleName() + "  >>> get specialValue : " + CommonNullConstantUtil.getSpecialValueByClassType(BigDecimal.class));
         System.out.println(Date.class.getSimpleName() + "  >>> get specialValue : " + CommonNullConstantUtil.getSpecialValueByClassType(Date.class));
+
+    }
+
+
+    @Test
+    public void testCopyConvertSpecialWithNull() {
+        User user = new User();
+        User user1 = CommonNullConstantUtil.copyConvertSpecialWithNull(user, User.class);
+        System.out.println("user1 = " + user1);
+        UserDTO userDTO = CommonNullConstantUtil.copyConvertSpecialWithNull(user, UserDTO.class);
+        System.out.println("userDTO = " + userDTO);
+
+        User userA = User.builder().userUuid("123").age(28).build();
+        UserDTO userDTO2 = CommonNullConstantUtil.copyConvertSpecialWithNull(userA, UserDTO.class);
+        System.out.println("userDTO2 = " + userDTO2);
+
+        User userRandom = CreateRandomObjectUtil.createData(User.class);
+        userRandom.setAge(null);
+        userRandom.setUserUuid(null);
+        UserDTO userDTO3 = CommonNullConstantUtil.copyConvertSpecialWithNull(userRandom, UserDTO.class);
+        System.out.println("userDTO3 = " + userDTO3);
 
     }
 
