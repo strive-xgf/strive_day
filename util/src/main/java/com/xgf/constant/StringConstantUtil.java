@@ -32,6 +32,11 @@ public class StringConstantUtil {
     public static final String LINE_FEED = "\r\n";
     public static final String LOG = "log";
     public static final String SYS_TIME_LOG = "sysTimeLog";
+    public static final String COLON = ":";
+    public static final String CHINESE_COLON = "：";
+    public static final String SEMICOLON = ";";
+    public static final String CHINESE_SEMICOLON = "；";
+    public static final String CHANGE_SEPARATOR = " => ";
 
     /**
      * 正则：数字
@@ -186,7 +191,20 @@ public class StringConstantUtil {
         return sb;
     }
 
+    public static String listToString(List<?> dataList) {
+        return StringUtils.join(dataList, StringConstantUtil.COMMA);
+    }
 
+    /**
+     * List 转 String
+     *
+     * @param dataList List 数据
+     * @param separator 分隔符
+     * @return String字符串
+     */
+    public static String listToString(List<?> dataList, Object separator) {
+        return StringUtils.join(dataList, separator);
+    }
 
 
     /**
