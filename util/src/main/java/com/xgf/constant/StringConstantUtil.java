@@ -37,6 +37,9 @@ public class StringConstantUtil {
     public static final String SEMICOLON = ";";
     public static final String CHINESE_SEMICOLON = "；";
     public static final String CHANGE_SEPARATOR = " => ";
+    public static final String PARAM = "param";
+    public static final String EXCEPTION = "exception";
+    public static final String EXIST = "exist";
 
     /**
      * 正则：数字

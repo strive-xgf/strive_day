@@ -8,4 +8,12 @@ spring:
   application:
     name: strive_day_DEMO
 
+# 自定义配置变量
+custom:
+  # 配置
+  config:
+    # 日志
+    log:
+      # 关闭转换为json字符串
+      closeConvertJson: false
 
