@@ -26,7 +26,7 @@ public class GuavaRetryDemoController {
     @PostMapping(value = "/testGuavaRetryBaseConfig")
     @ApiOperation(value = "测试GuavaRetry", notes = "测试GuavaRetry重试，基于配置")
     public CommonDataResponse<String> testGuavaRetryBaseConfig() {
-        LogUtil.info(">>>>>> execute testGuavaRetry", System.currentTimeMillis());
+        LogUtil.infoParam(">>>>>> execute testGuavaRetry", System.currentTimeMillis());
 
 //        try {
 //            Thread.sleep(5000);
@@ -44,7 +44,7 @@ public class GuavaRetryDemoController {
     @PostMapping(value = "/testGuavaRetryBaseAnnotation")
     @ApiOperation(value = "测试GuavaRetry重试基于注解", notes = "基本测试")
     public CommonDataResponse<Void> testGuavaRetryBaseAnnotation() {
-        LogUtil.info(">>>>>> execute testGuavaRetry2", System.currentTimeMillis());
+        LogUtil.infoParam(">>>>>> execute testGuavaRetry2", System.currentTimeMillis());
         throw CustomExceptionEnum.DATA_CONVERT_EXCEPTION.generateException();
     }
 

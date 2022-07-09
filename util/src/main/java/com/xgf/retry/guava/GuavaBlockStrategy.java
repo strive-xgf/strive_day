@@ -23,6 +23,6 @@ public class GuavaBlockStrategy implements BlockStrategy {
             end = System.currentTimeMillis();
         }
 
-        LogUtil.info("block end", start, end, sleepTime);
+        LogUtil.info("block end, start = {}, end = {}, sleepTime = {}", start, end, sleepTime);
     }
 }

@@ -34,24 +34,88 @@ public class LogUtil {
         LogUtil.CLOSE_CONVERT_JSON = closeConvertJson;
     }
 
-    public static void trace(Object ...objects) {
-        log.trace(getLogInfo(getStackTrace(3),objects));
+    /**
+     * 打印参数
+     */
+    public static void traceParam(Object ...objects) {
+        log.trace(getLogParamInfo(getStackTrace(3),objects));
     }
 
-    public static void debug(Object ...objects) {
-        log.debug(getLogInfo(getStackTrace(3),objects));
+    public static void debugParam(Object ...objects) {
+        log.debug(getLogParamInfo(getStackTrace(3),objects));
     }
 
-    public static void info(Object ...objects) {
-        log.info(getLogInfo(getStackTrace(3),objects));
+    public static void infoParam(Object ...objects) {
+        log.info(getLogParamInfo(getStackTrace(3),objects));
     }
 
-    public static void warn(Object ...objects) {
-        log.warn(getLogInfo(getStackTrace(3),objects));
+    public static void warnParam(Object ...objects) {
+        log.warn(getLogParamInfo(getStackTrace(3),objects));
     }
 
-    public static void error(Object...objects) {
-        log.error(getLogInfo(getStackTrace(3),objects));
+    public static void errorParam(Object...objects) {
+        log.error(getLogParamInfo(getStackTrace(3),objects));
+    }
+
+
+    /**
+     * 基于模板打印参数
+     */
+    public static void trace(String template, Object ...objects) {
+        log.trace(convertTemplate(template), convertParamToArray(objects));
+    }
+
+    public static void debug(String template, Object ...objects) {
+        log.debug(convertTemplate(template), convertParamToArray(objects));
+    }
+
+    public static void info(String template, Object ...objects) {
+        log.info(convertTemplate(template), convertParamToArray(objects));
+    }
+
+    public static void warn(String template, Object ...objects) {
+        log.warn(convertTemplate(template), convertParamToArray(objects));
+    }
+
+    public static void error(String template, Object ...objects) {
+        log.error(convertTemplate(template), convertParamToArray(objects));
+    }
+
+    public static void error(String template, Throwable throwable, Object ...objects) {
+        log.error(convertTemplate(template), convertParamToArray(objects), throwable);
+    }
+
+
+    /**
+     * 转换模板，添加前缀trace信息
+     *
+     * @param template 模板
+     * @return trace信息
+     */
+    private static String convertTemplate(String template) {
+        if (template == null) {
+            return getStackTraceLogInfo(getStackTrace(4));
+        }
+
+        return getStackTraceLogInfo(getStackTrace(4)) + StringConstantUtil.CHANGE_SEPARATOR + template;
+    }
+
+    private static Object[] convertParamToArray(Object... params) {
+        if (params.length == 0) {
+            return new String[0];
+        }
+
+        Object[] paramArray = new Object[params.length];
+        for (int i = 0; i < params.length; i++) {
+            if (CLOSE_CONVERT_JSON != null && CLOSE_CONVERT_JSON) {
+                paramArray[i] = params[i];
+            } else {
+                paramArray[i] = convertToStr(params[i]);
+            }
+
+        }
+
+        return paramArray;
     }
 
     /**
@@ -61,17 +125,8 @@ public class LogUtil {
      * @param params 参数
      * @return 打印的日志信息
      */
-    private static String getLogInfo(StackTraceElement stackTrace, Object... params) {
-        StringBuilder sb = new StringBuilder()
-                .append(StringConstantUtil.CHINESE_LEFT_MIDDLE_BRACKET)
-                .append(stackTrace.getFileName())
-                .append(StringConstantUtil.CHANGE_SEPARATOR)
-                .append(stackTrace.getClassName())
-                .append(StringConstantUtil.DOT)
-                .append(stackTrace.getMethodName())
-                .append(StringConstantUtil.COLON)
-                .append(stackTrace.getLineNumber())
-                .append(StringConstantUtil.CHINESE_RIGHT_MIDDLE_BRACKET);
+    private static String getLogParamInfo(StackTraceElement stackTrace, Object... params) {
+        StringBuilder sb = new StringBuilder(getStackTraceLogInfo(stackTrace));
 
         // 打印参数
         if (params.length == 0) {
@@ -92,6 +147,24 @@ public class LogUtil {
         sb.append(StringConstantUtil.RIGHT_MIDDLE_BRACKET);
 
         return sb.toString();
+    }
+
+    /**
+     * 获取方法堆栈日志信息
+     *
+     * @param stackTrace StackTraceElement
+     * @return 文件信息、类信息、方法信息、行数
+     */
+    private static String getStackTraceLogInfo(StackTraceElement stackTrace) {
+        return StringConstantUtil.CHINESE_LEFT_MIDDLE_BRACKET +
+                stackTrace.getFileName() +
+                StringConstantUtil.CHANGE_SEPARATOR +
+                stackTrace.getClassName() +
+                StringConstantUtil.DOT +
+                stackTrace.getMethodName() +
+                StringConstantUtil.COLON +
+                stackTrace.getLineNumber() +
+                StringConstantUtil.CHINESE_RIGHT_MIDDLE_BRACKET;
     }
 
     /**
@@ -117,7 +190,6 @@ public class LogUtil {
      * @return 字符串信息
      */
     private static String convertToStr(Object object) {
-        long startTime = System.currentTimeMillis();
 
         if (object == null) {
             log.info("====== {} getValue in param is null", log.getName());

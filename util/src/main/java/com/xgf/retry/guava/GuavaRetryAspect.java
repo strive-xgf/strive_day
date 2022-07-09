@@ -66,7 +66,7 @@ public class GuavaRetryAspect {
         // 拼接uri路径
         final String uri = String.join(StringConstantUtil.DOT, method.getDeclaringClass().getName(), method.getName());
 
-        LogUtil.info(">>>>>> guava retry executeAround url", uri);
+        LogUtil.infoParam(">>>>>> guava retry executeAround url", uri);
 
         // 没有注解，读取配置，配置拦截重试接口为空，或者当前uri接口不是拦截接口，直接执行结束
         if (annotation == null && (CollectionUtils.isEmpty(guavaRetryProperties.getApis()) || !guavaRetryProperties.getApis().contains(uri))) {
@@ -185,7 +185,7 @@ public class GuavaRetryAspect {
 
         // 当前只处理方法重试
         if (!(joinPoint.getSignature() instanceof MethodSignature)) {
-            LogUtil.info("param no MethodSignature");
+            LogUtil.infoParam("param no MethodSignature");
             return null;
         }
 

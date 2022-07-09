@@ -3,7 +3,6 @@ package com.xgf.common;
 import com.xgf.DemoApplication;
 import com.xgf.bean.User;
 import com.xgf.exception.CustomExceptionEnum;
-import com.xgf.spring.SpringUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,17 +21,34 @@ import java.util.Arrays;
 public class LogUtilTest {
 
     @Test
-    public void testInfo() {
+    public void testInfoParam() {
         try {
             throw CustomExceptionEnum.CUSTOM_PARAM_VALIDATOR_NULL_EXCEPTION.generateException();
         } catch (Exception e) {
-            LogUtil.error("1", "2", e, User.builder().userUuid("uuid").age(22).build(), Arrays.asList("S1", "S2"));
+            LogUtil.errorParam("1", "2", e, User.builder().userUuid("uuid").age(22).build(), Arrays.asList("S1", "S2"));
         }
     }
 
     @Test
-    public void testDeBug() {
-        LogUtil.info("debug");
+    public void testDeBugParam() {
+        LogUtil.infoParam("debug");
+    }
+
+    @Test
+    public void testInfo() {
+        try {
+            throw CustomExceptionEnum.CUSTOM_PARAM_VALIDATOR_NULL_EXCEPTION.generateException();
+        }catch (Exception e) {
+            LogUtil.info("info execute method = {} param is null, time = {}",
+                    "info testInfo", System.currentTimeMillis(), User.builder().userUuid("uuid").age(22).build(), Arrays.asList("S1", "S2"));
+            LogUtil.info("execute method = {} param is null, time = {}, user = {}, stringList = {}",
+                    "testInfo", System.currentTimeMillis(), User.builder().userUuid("uuid").age(22).build(), Arrays.asList("S1", "S2"), e);
+            LogUtil.warn("warn execute method = {} param is null, time = {}, user = {}, stringList = {}",
+                    "testInfo", System.currentTimeMillis(), User.builder().userUuid("uuid").age(22).build(), Arrays.asList("S1", "S2"), e);
+            LogUtil.error("error execute method = {} param is null, time = {}, user = {}, stringList = {}, e = {}",
+                    "testInfo", System.currentTimeMillis(), User.builder().userUuid("uuid").age(22).build(), e);
+        }
+
     }
 
 }

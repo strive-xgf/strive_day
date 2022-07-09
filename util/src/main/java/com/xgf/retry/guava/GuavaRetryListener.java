@@ -17,14 +17,14 @@ public class GuavaRetryListener implements RetryListener {
 
     @Override
     public <V> void onRetry(Attempt<V> attempt) {
-        LogUtil.info(">>>>>> guava retry  ", attempt.getAttemptNumber(), attempt.getDelaySinceFirstAttempt());
+        LogUtil.info(">>>>>> guava retry  attemptNumber = {}, delaySinceFirstAttempt = {}", attempt.getAttemptNumber(), attempt.getDelaySinceFirstAttempt());
 
         if (attempt.hasException()){
-            LogUtil.warn("====== guava retry exist exception", attempt.getExceptionCause().toString());
+            LogUtil.warn("====== guava retry exist exception = {}", attempt.getExceptionCause().toString());
         }
 
         if (attempt.hasResult()) {
-            LogUtil.info("====== guava retry has result", attempt.getResult());
+            LogUtil.info("====== guava retry has result = {}", attempt.getResult());
         }
 
     }
