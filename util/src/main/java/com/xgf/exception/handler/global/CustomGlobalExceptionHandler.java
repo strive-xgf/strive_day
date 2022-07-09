@@ -181,6 +181,20 @@ public class CustomGlobalExceptionHandler {
 
 		} else {
 			errorType = "OtherException";
+			// 兼容记录错误信息（eg: java.lang.reflect.UndeclaredThrowableException），e.getMessage 为空
+			if (StringUtils.isBlank(errorInfo)) {
+				Throwable cause = e.getCause();
+				StringBuilder sb = new StringBuilder();
+				while (cause != null) {
+					sb.append(cause.getLocalizedMessage()).append(StringConstantUtil.CHANGE_SEPARATOR);
+					cause = cause.getCause();
+				}
+				if (sb.length() > 0) {
+					// 删除最后指定长度内容
+					sb.delete(sb.length() - StringConstantUtil.CHANGE_SEPARATOR.length(), sb.length());
+				}
+				errorInfo = sb.toString();
+			}
 		}
 
 		return ExceptionInfoAssembly.convert(response, errorInfo, errorType);

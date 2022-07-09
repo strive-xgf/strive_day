@@ -16,4 +16,20 @@ custom:
     log:
       # 关闭转换为json字符串
       closeConvertJson: false
+    # guava-retry 重试机制
+    guava:
+      retry:
+        # 是否开启
+        enabled: true
+        # 重试次数
+        attemptNumber: 3
+#        duration: 50000 配置不支持
+        # 等待时间（重试间隔等待策略） 单位: 毫秒
+        waitStrategySleepTime: 500
+        # 重试方法最大执行时间（超过则中断重试）单位: 毫秒
+        limitDuration: 50002
+        # 重试接口（配置接口会尝试重试/使用注解也行，注解优先）
+        apis:
+          - com.xgf.mvc.controller.GuavaRetryDemoController.testGuavaRetryBaseConfig
+          - com.xgf.mvc.controller.GuavaRetryDemoController.testGuavaRetryBaseAnnotation
 

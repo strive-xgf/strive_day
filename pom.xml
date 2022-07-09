@@ -49,6 +49,9 @@
         <belerweb.pinyin4j>2.5.0</belerweb.pinyin4j>
         <stuxuhai.jpinyin>1.1.8</stuxuhai.jpinyin>
         <apache.poi>3.17</apache.poi>
+
+        <guava-retrying.version>2.0.0</guava-retrying.version>
+
     </properties>
 
 
@@ -240,6 +243,13 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>${apache.poi}</version>
+        </dependency>
+
+        <!-- guava retry -->
+        <dependency>
+            <groupId>com.github.rholder</groupId>
+            <artifactId>guava-retrying</artifactId>
+            <version>${guava-retrying.version}</version>
         </dependency>
 
     </dependencies>
