@@ -25,6 +25,7 @@ public enum CustomExceptionEnum implements EnumBase {
     FILE_CREATE_EXCEPTION("fileCreateException", "文件创建异常"),
     FILE_DOWNLOAD_EXCEPTION("fileDownloadException", "文件下载异常"),
     CUSTOM_CHECK_DATA_ILLEGAL_EXCEPTION("customCheckDataIllegalException", "自定义校验数据非法异常"),
+    CUSTOM_FUNCTION_EXCEPTION("customFunctionException", "自定义函数式接口异常"),
     ;
 
     private String code;
