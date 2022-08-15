@@ -14,10 +14,18 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author xgf
@@ -68,6 +76,30 @@ public class DemoController {
 //        return CommonPageDataResponse.fail("testPageCommon 执行失败了，喔喔喔喔喔");
 
         return CommonPageDataResponse.ok(userService.searchUserByPage(req.getParam().getUserCondition(), req.getPage()));
+    }
+
+
+
+    @PostMapping(value = "/testSwaggerRequestHeader")
+    @ApiOperation(value = "测试 swagger 请求头", notes = "测试 swagger 请求头, 入参传 header 的 key")
+    CommonDataResponse<Map<String, String>> testSwaggerRequestHeader(@RequestBody @Valid CommonDataRequest<List<String>> req) {
+
+        if (Objects.isNull(RequestContextHolder.getRequestAttributes())
+                || Objects.isNull(req)
+                || CollectionUtils.isEmpty(req.getParam())) {
+            return CommonDataResponse.ok();
+        }
+
+        Map<String, String> resultMap = new LinkedHashMap<>();
+
+//        LogUtil.info("====== token = {}", JsonUtil.toJsonString(httpServletRequest.getHeader(StringConstantUtil.TOKEN_HERDER_KEY)));
+        HttpServletRequest httpServletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
+        for (String headerKey : req.getParam()) {
+            resultMap.put(headerKey, httpServletRequest.getHeader(headerKey));
+        }
+
+        return CommonDataResponse.ok(resultMap);
     }
 
 }

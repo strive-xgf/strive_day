@@ -1,10 +1,14 @@
 package com.xgf.mvc.config.swagger;
 
+import com.xgf.constant.StringConstantUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.schema.ModelRef;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -13,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author xgf
@@ -57,7 +64,8 @@ public class SwaggerConfig {
                 // .apis(RequestHandlerSelectors.basePackage("com.xgf.mvc.controller.DemoController"))
                 // 过滤路径 (ant指定包. any 全部, none: 无）
 //                .paths(PathSelectors.ant("/com/xgf/mvc/**"))
-                .build();
+                .build()
+                .globalOperationParameters(getParameterList());
     }
 
     /**
@@ -89,6 +97,26 @@ public class SwaggerConfig {
     @Bean
     public Docket docket2(){
         return new Docket(DocumentationType.SWAGGER_2).groupName("swagger_2");
+    }
+
+    /**
+     * header 参数配置方法
+     */
+    private List<Parameter> getParameterList() {
+        List<Parameter> pars = new ArrayList<>();
+
+        // token
+        Parameter tokenParameter = new ParameterBuilder()
+                .name(StringConstantUtil.TOKEN_HERDER_KEY)
+                .description("token令牌")
+                .modelRef(new ModelRef("string"))
+                .parameterType("header")
+                // false，表示 clientId 参数，是非必填
+                .required(false)
+                .build();
+        pars.add(tokenParameter);
+
+        return pars;
     }
 
 }

@@ -66,6 +66,14 @@ public class StringConstantUtil {
      */
     public static final String MATCH_CHINESE = "[\\u4E00-\\u9FA5]+";
 
+    // ---------- request header key start -----------
+
+    /**
+     * token 令牌
+     */
+    public static final String TOKEN_HERDER_KEY = "strive-token";
+
+    // ---------- request header key end -----------
 
 
 
