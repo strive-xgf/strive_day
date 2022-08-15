@@ -2,11 +2,15 @@ package com.xgf.mvc.controller;
 
 import com.xgf.bean.User;
 import com.xgf.bean.WorkInfo;
+import com.xgf.common.LogUtil;
 import com.xgf.constant.page.CommonPageDataResponse;
 import com.xgf.constant.page.CommonPageRequest;
 import com.xgf.constant.reqrep.CommonDataRequest;
 import com.xgf.constant.reqrep.CommonDataResponse;
+import com.xgf.constant.reqrep.header.RequestDeviceUtil;
 import com.xgf.exception.CustomExceptionEnum;
+import com.xgf.java8.BooleanFunctionUtil;
+import com.xgf.java8.BranchHandleUtil;
 import com.xgf.mvc.bean.req.SearchUserReqDTO;
 import com.xgf.mvc.service.UserService;
 import com.xgf.randomstr.RandomStrUtil;
@@ -15,6 +19,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -94,6 +99,11 @@ public class DemoController {
 
 //        LogUtil.info("====== token = {}", JsonUtil.toJsonString(httpServletRequest.getHeader(StringConstantUtil.TOKEN_HERDER_KEY)));
         HttpServletRequest httpServletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
+
+        BranchHandleUtil.isTrueOrFalse(RequestDeviceUtil.isMobile())
+                .handle(() -> System.out.println("手机端访问 : " + RequestDeviceUtil.getRequestDevice()),
+                        () -> System.out.println("pc端访问：" + RequestDeviceUtil.getRequestDevice()));
 
         for (String headerKey : req.getParam()) {
             resultMap.put(headerKey, httpServletRequest.getHeader(headerKey));
