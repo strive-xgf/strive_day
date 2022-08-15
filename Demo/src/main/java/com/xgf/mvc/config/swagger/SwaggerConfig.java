@@ -2,6 +2,7 @@ package com.xgf.mvc.config.swagger;
 
 import com.xgf.constant.StringConstantUtil;
 import com.xgf.constant.reqrep.header.RequestDeviceUtil;
+import com.xgf.constant.reqrep.header.RequestVersionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -127,6 +128,17 @@ public class SwaggerConfig {
                 .required(false)
                 .build();
         pars.add(deviceParameter);
+
+        // 访问版本号
+        Parameter versionParameter = new ParameterBuilder()
+                .name(RequestVersionUtil.EXTEND_VERSION_HEADER_KEY)
+                .description("version")
+                .modelRef(new ModelRef("string"))
+                .parameterType("header")
+                // false，表示 clientId 参数，是非必填
+                .required(false)
+                .build();
+        pars.add(versionParameter);
 
         return pars;
     }

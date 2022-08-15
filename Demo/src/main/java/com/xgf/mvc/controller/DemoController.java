@@ -8,6 +8,7 @@ import com.xgf.constant.page.CommonPageRequest;
 import com.xgf.constant.reqrep.CommonDataRequest;
 import com.xgf.constant.reqrep.CommonDataResponse;
 import com.xgf.constant.reqrep.header.RequestDeviceUtil;
+import com.xgf.constant.reqrep.header.RequestVersionUtil;
 import com.xgf.exception.CustomExceptionEnum;
 import com.xgf.java8.BooleanFunctionUtil;
 import com.xgf.java8.BranchHandleUtil;
@@ -104,6 +105,9 @@ public class DemoController {
         BranchHandleUtil.isTrueOrFalse(RequestDeviceUtil.isMobile())
                 .handle(() -> System.out.println("手机端访问 : " + RequestDeviceUtil.getRequestDevice()),
                         () -> System.out.println("pc端访问：" + RequestDeviceUtil.getRequestDevice()));
+
+        // 版本校验
+        RequestVersionUtil.checkVersionWithMobileOrElseThrow("demoVersionConfig");
 
         for (String headerKey : req.getParam()) {
             resultMap.put(headerKey, httpServletRequest.getHeader(headerKey));

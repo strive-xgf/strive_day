@@ -18,6 +18,8 @@ custom:
       closeConvertJson: false
       # redisUtil工具添加日志，true: 开启
       lockLogFlag: true
+      # 请求版本号校验开启日志打印，true: 开启
+      requestVersionLogFlag: true
     # guava-retry 重试机制
     guava:
       retry:
@@ -34,4 +36,8 @@ custom:
         apis:
           - com.xgf.mvc.controller.GuavaRetryDemoController.testGuavaRetryBaseConfig
           - com.xgf.mvc.controller.GuavaRetryDemoController.testGuavaRetryBaseAnnotation
+    # 访问请求配置
+    request:
+      # 请求版本Map配置
+      versionMap: "{'demoVersionConfig':'22.33.55', 'b':'22.33.66', 'c':'22.33.77', 'd':'22.33.88'}"
 
