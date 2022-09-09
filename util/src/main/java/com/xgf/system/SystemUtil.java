@@ -53,6 +53,14 @@ public class SystemUtil {
                 : Boolean.FALSE;
     }
 
+    public static boolean judgeSystemType(SystemEnum systemEnum){
+        String system = systemType();
+        return StringUtils.isNotBlank(system)
+                ? system.toLowerCase().contains(systemEnum.getCode().toLowerCase())
+                : Boolean.FALSE;
+    }
+
+
     /**
      * 获取行分隔符
      * @return windows 下是 \r\n，在Linux下面是 \n， 在Mac下是 \r

@@ -7,7 +7,9 @@ package com.xgf.system.bean;
  */
 public enum SystemEnum {
     WINDOWS("windows", "windows系统"),
-    LINUX("linux", "linux系统")
+    LINUX("linux", "linux系统"),
+    UNIX("unix", "unix系统"),
+    MAC_OS("mac os", "mac os系统"),
     ;
 
     private final String code;
