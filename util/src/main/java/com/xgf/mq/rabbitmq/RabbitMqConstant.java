@@ -51,9 +51,19 @@ public class RabbitMqConstant {
     }
 
     /**
-     * Rabbitmq tag号
+     * Rabbitmq tag号（routingKey） 路由key
      */
     public static class MqTag {
+
+        /**
+         * RabbitMQ 默认路由标签
+         */
+        public static final String TAG_DEFAULT_NAME = "defaultTag";
+
+        /**
+         * RabbitMQ 默认 direct 路由标签
+         */
+        public static final String TAG_DIRECT_DEFAULT_NAME = "direct.defaultTag";
 
     }
 
@@ -62,6 +72,48 @@ public class RabbitMqConstant {
      */
     public static class MqExchange {
 
+        /**
+         * RabbitMQ 默认 direct 交换机名
+         */
+        public static final String EXCHANGE_DIRECT_NAME = "directExchange";
+
+        /**
+         * RabbitMQ 默认 fanout 交换机名
+         */
+        public static final String EXCHANGE_FANOUT_NAME = "fanoutExchange";
+
+        /**
+         * RabbitMQ 默认 topic 交换机名
+         */
+        public static final String EXCHANGE_TOPIC_NAME = "topicExchange";
+
+    }
+
+    /**
+     * Rabbitmq exchange type（Exchange 定义类型，决定到底是哪些Queue符合条件，可以接收消息）
+     */
+    public static class MqExchangeType {
+
+        /**
+         * 所有 bind 到此 exchange 的 queue 都可以接收消息【广播】
+         */
+        public static final String EXCHANGE_TYPE_FANOUT = "fanout";
+
+
+        /**
+         * 通过 routingKey 和 exchange 决定的那个【唯一】的 queue 可以接收消息
+         */
+        public static final String EXCHANGE_TYPE_DIRECT = "direct";
+
+
+        /**
+         * 所有符合 routingKey （可以是一个表达式）的 routingKey 所 bind 的 queue 都可以接收消息
+         * 表达式符号说明：# 代表一个或多个字符匹配，* 代表任何字符匹配
+         * eg:
+         *      “#” 表示 0 个或若干个关键字，“*” 表示一个关键字。如： “log.*” 能与 “log.warn” 匹配，无法与 “log.warn.timeout” 匹配， “log.#” 则能与上述两者都匹配。
+         *      “#.log.#” 表示该队列关心所有涉及 log 的消息(一个 Routing Key 为 ”mq.log.error” 的消息会被转发到该队列)。
+         */
+        public static final String EXCHANGE_TYPE_TOPIC = "topic";
     }
 
 
