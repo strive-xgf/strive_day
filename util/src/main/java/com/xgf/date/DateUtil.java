@@ -1,6 +1,9 @@
 package com.xgf.date;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
@@ -36,6 +39,12 @@ public class DateUtil {
      * yyyy年MM月dd日（精确到天 —— 中文格式）
      */
     public static final String FORMAT_DAY_CN = "yyyy年MM月dd日";
+
+    /**
+     * yyyy年MM月dd日 星期几（精确到天 —— 中文格式）
+     */
+    public static final String FORMAT_DAY_WEEK_CN = "yyyy年MM月dd日 EEEE";
+
     /**
      * yyyy年MM月dd日 HH时mm分ss秒 （精确到秒 —— 中文格式）
      */
@@ -44,6 +53,11 @@ public class DateUtil {
      * yyyy年MM月dd日 HH时mm分ss秒SSS毫秒 （精确到毫秒 —— 中文格式）
      */
     public static final String FORMAT_MILL_CN = "yyyy年MM月dd日 HH时mm分ss秒SSS毫秒";
+
+    /**
+     * HH:mm:ss.SSS 精确到秒
+     */
+    public static final String FORMAT_TIME_SECOND = "HH:mm:ss";
 
     /**
      * 默认时间解析格式：yyyy-MM-dd
@@ -292,6 +306,17 @@ public class DateUtil {
     }
 
     /**
+     * 将 毫秒 时间转换为 TimeUnit
+     *
+     * @param millis 毫秒数
+     * @return TimeUnit
+     */
+    public static TimeUnit getTimeUnitByMillis(Long millis) {
+        return TimeUnit.getTimeUnitByMillis(millis);
+    }
+
+
+    /**
      * 比较两个时间的时间间隔
      * 支持Date类型数据，和符合条件的六种默认格式的String时间
      *
@@ -421,33 +446,161 @@ public class DateUtil {
         return result.getTime();
     }
 
-
-}
-
-/**
- * 时间单位
- */
-@Data
-class TimeUnit {
-    private Long days;
-    private Long hours;
-    private Long minutes;
-    private Long seconds;
-    private Long millis;
     /**
-     * 转换为： {} 天 {} 小时 {} 分钟 {} 毫秒  格式显示
+     * 时间单位枚举
      */
-    private String description;
+    @Getter
+    @AllArgsConstructor
+    public static enum TimeUnitEnum {
 
-    public TimeUnit() {
+        MILLIS(1, "毫秒"),
+
+        SECOND(2, "秒"),
+
+        MINUTE(3, "分"),
+
+        HOUR(4, "时"),
+
+        DAY(5, "天"),
+        ;
+
+        private Integer value;
+        private String desc;
     }
 
-    public TimeUnit(Long days, Long hours, Long minutes, Long seconds, Long millis, String description) {
-        this.days = days;
-        this.hours = hours;
-        this.minutes = minutes;
-        this.seconds = seconds;
-        this.millis = millis;
-        this.description = description;
+    /**
+     * 时间单位
+     */
+    @Data
+    public static class TimeUnit {
+        private Long days;
+        private Long hours;
+        private Long minutes;
+        private Long seconds;
+        private Long millis;
+        /**
+         * 转换为： {} 天 {} 小时 {} 分钟 {} 毫秒  格式显示
+         */
+        private String description;
+
+        public TimeUnit() {
+        }
+
+        public TimeUnit(Long days, Long hours, Long minutes, Long seconds, Long millis, String description) {
+            this.days = days;
+            this.hours = hours;
+            this.minutes = minutes;
+            this.seconds = seconds;
+            this.millis = millis;
+            this.description = description;
+        }
+
+        /**
+         * @return 初始化数据全 0 的TimeUnit
+         */
+        public static TimeUnit initZeroTimeUnit() {
+            TimeUnit timeUnit = new TimeUnit();
+            timeUnit.setDays(0L);
+            timeUnit.setHours(0L);
+            timeUnit.setMinutes(0L);
+            timeUnit.setSeconds(0L);
+            timeUnit.setMillis(0L);
+            timeUnit.assembleDescription();
+            return timeUnit;
+        }
+
+        /**
+         * @return 组装描述信息description
+         */
+        public String assembleDescription() {
+            return assembleDescription(this, null);
+        }
+
+        public String assembleDescription(TimeUnitEnum preciseUnitEnum) {
+            return assembleDescription(this, preciseUnitEnum);
+        }
+
+        /**
+         * @param param TimeUnit 值
+         * @param preciseUnitEnum 精度（精确到具体值）【舍去法】
+         * @return 组装描述信息description
+         */
+        public static String assembleDescription(TimeUnit param, TimeUnitEnum preciseUnitEnum) {
+            preciseUnitEnum = ObjectUtils.defaultIfNull(preciseUnitEnum, TimeUnitEnum.MILLIS);
+
+            StringBuilder sb = new StringBuilder();
+            if (param.days != null && param.days > 0 && TimeUnitEnum.DAY.getValue() >= preciseUnitEnum.getValue()) {
+                sb.append(param.days).append(" 天 ");
+            }
+
+            if (param.hours != null && param.hours > 0 && TimeUnitEnum.HOUR.getValue() >= preciseUnitEnum.getValue()) {
+                sb.append(param.hours).append(" 时 ");
+            }
+
+            if (param.minutes != null && param.minutes > 0 && TimeUnitEnum.MINUTE.getValue() >= preciseUnitEnum.getValue()) {
+                sb.append(param.minutes).append(" 分 ");
+            }
+
+            if (param.seconds != null && param.seconds > 0 && TimeUnitEnum.SECOND.getValue() >= preciseUnitEnum.getValue()) {
+                sb.append(param.seconds).append(" 秒 ");
+            }
+
+            if (param.millis != null && param.millis > 0 && TimeUnitEnum.MILLIS.getValue() >= preciseUnitEnum.getValue()) {
+                sb.append(param.millis).append(" 毫秒 ");
+            }
+
+            param.setDescription(StringUtils.isBlank(sb.toString()) ? "0 " + preciseUnitEnum.getDesc() : sb.toString());
+
+            return param.getDescription();
+        }
+
+        /**
+         * 通过毫秒时间转换TimeUnit
+         *
+         * @param millisParam 毫秒时间
+         * @return TimeUnit
+         */
+        public static TimeUnit getTimeUnitByMillis(Long millisParam) {
+            if (millisParam == null || millisParam == 0) {
+                return TimeUnit.initZeroTimeUnit();
+            }
+            // 转化为时分秒的格式
+            long second = 1000;
+            long minute = 60 * second;
+            long hour = 60 * minute;
+            long day = 24 * hour;
+
+            TimeUnit result = new TimeUnit();
+
+            if (millisParam / day > 0) {
+                result.setDays(millisParam / day);
+                millisParam = millisParam % day;
+            }
+
+            if (millisParam / hour > 0) {
+                result.setHours(millisParam / hour);
+                millisParam = millisParam % hour;
+            }
+
+            if (millisParam / minute > 0) {
+                result.setMinutes(millisParam / minute);
+                millisParam = millisParam % minute;
+            }
+
+            if (millisParam / second > 0) {
+                result.setSeconds(millisParam / second);
+                millisParam = millisParam % second;
+            }
+
+            if (millisParam > 0) {
+                result.setMillis(millisParam);
+            }
+
+            result.assembleDescription();
+            return result;
+        }
     }
+
+
 }
+

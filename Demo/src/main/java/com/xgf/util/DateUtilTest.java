@@ -1,6 +1,7 @@
 package com.xgf.util;
 
 import com.alibaba.fastjson.JSON;
+import com.xgf.common.JsonUtil;
 import com.xgf.date.DateUtil;
 import org.junit.Test;
 
@@ -50,6 +51,30 @@ public class DateUtilTest {
     public void testGetNextDaySixClock() {
         System.out.println(DateUtil.dateFormatString(DateUtil.getNextDaySixClock(), DateUtil.FORMAT_MILL));
         System.out.println(DateUtil.getNextDaySixClock().getTime());
+    }
+
+    @Test
+    public void testGetTimeUnitByMillis() {
+        long m1 = 9999;
+        System.out.println(JsonUtil.toJsonString(DateUtil.getTimeUnitByMillis(m1)));
+        System.out.println(m1 + " ms = " + DateUtil.getTimeUnitByMillis(m1).getDescription());
+
+        long m2 = 999999;
+        System.out.println(JsonUtil.toJsonString(DateUtil.getTimeUnitByMillis(m2)));
+        System.out.println(m2 + " ms = " + DateUtil.getTimeUnitByMillis(m2).getDescription());
+        System.out.println(m2 + " ms = " + DateUtil.getTimeUnitByMillis(m2).assembleDescription(DateUtil.TimeUnitEnum.DAY));
+
+        long m3 = 99999960000L;
+        System.out.println(JsonUtil.toJsonString(DateUtil.getTimeUnitByMillis(m3)));
+        System.out.println(m3 + " ms = " + DateUtil.getTimeUnitByMillis(m3).getDescription());
+
+        long m4 = 99999960000L;
+        System.out.println(JsonUtil.toJsonString(DateUtil.getTimeUnitByMillis(m4)));
+        System.out.println(m4 + " ms = " + DateUtil.getTimeUnitByMillis(m4).getDescription());
+
+        long m5 = 99999960000L - 32400000;
+        System.out.println(JsonUtil.toJsonString(DateUtil.getTimeUnitByMillis(m5)));
+        System.out.println(m5 + " ms = " + DateUtil.getTimeUnitByMillis(m5).getDescription());
     }
 
 }
