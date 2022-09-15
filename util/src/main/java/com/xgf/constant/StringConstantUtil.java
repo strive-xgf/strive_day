@@ -62,6 +62,11 @@ public class StringConstantUtil {
     public static final String MATCH_FLOAT_NUMBER = "^(-?\\d+)(\\.\\d+)?$";
 
     /**
+     * 正则：百分数
+     */
+    public static final String MATCH_PERCENT_NUMBER = "^([0-9.]+)[ ]*%$";
+
+    /**
      * 正则: 匹配汉字（中文字符）
      */
     public static final String MATCH_CHINESE = "[\\u4E00-\\u9FA5]+";
@@ -259,6 +264,13 @@ public class StringConstantUtil {
 
     }
 
+    /**
+     * @param str 校验字符串
+     * @return true：百分数（eg: 22.2%）
+     */
+    public static boolean checkStrIsPercentNumber(String str){
+        return checkStrIsMatches(str, MATCH_PERCENT_NUMBER);
+    }
 
     /**
      * 校验字符串是否全为中文汉字

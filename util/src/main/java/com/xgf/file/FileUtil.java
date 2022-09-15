@@ -71,19 +71,32 @@ public class FileUtil {
                 + appendFileSeparator(c.get(Calendar.HOUR_OF_DAY))
                 + StringConstantUtil.DOT + (StringUtils.isBlank(fileFormat) ? FILE_FORMAT : fileFormat);
 
-        File file = new File(basePath);
+        return createFileAndDir(basePath);
+    }
+
+
+    /**
+     * 创建目录和文件
+     *
+     * @param url 路径url
+     * @return File
+     */
+    public static File createFileAndDir(String url) {
+
+        File file = new File(url);
+
         if (!file.getParentFile().exists()) {
             // 创建父级目录
             if (!file.getParentFile().mkdirs()) {
-                throw CustomExceptionEnum.FILE_CREATE_EXCEPTION.generateException("dir path = " + basePath);
+                throw CustomExceptionEnum.FILE_CREATE_EXCEPTION.generateException("dir path = " + url);
             }
         }
 
         if (!file.exists()) {
-            // 创建文件
             try {
+                // 创建文件
                 if (!file.createNewFile()) {
-                    throw CustomExceptionEnum.FILE_CREATE_EXCEPTION.generateException("file path = " + basePath);
+                    throw CustomExceptionEnum.FILE_CREATE_EXCEPTION.generateException("file path = " + url);
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -104,6 +117,17 @@ public class FileUtil {
         }
 
         return SystemUtil.getFileSeparator() + String.valueOf(str);
+    }
+
+
+    /**
+     * 向指定路径文件追加数据
+     *
+     * @param pathUrl 文件路径
+     * @param data 数据
+     */
+    public static void fileAppendData(String pathUrl, String data) {
+        fileAppendData(createFileAndDir(pathUrl), data);
     }
 
     /**

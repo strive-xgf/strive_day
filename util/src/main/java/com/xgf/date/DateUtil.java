@@ -315,6 +315,16 @@ public class DateUtil {
         return TimeUnit.getTimeUnitByMillis(millis);
     }
 
+    /**
+     * 将秒的时间，转换为日时分秒数据格式
+     *
+     * @param secondParam 秒时间
+     * @return 日时分秒 字符串
+     */
+    public static String getDayHourMinuteSecondBySecond(Long secondParam) {
+        return TimeUnit.getTimeUnitByMillis(secondParam * 1000).assembleDescription(TimeUnitEnum.SECOND);
+    }
+
 
     /**
      * 比较两个时间的时间间隔

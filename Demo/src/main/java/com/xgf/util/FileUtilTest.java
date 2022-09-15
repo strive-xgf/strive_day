@@ -1,6 +1,7 @@
 package com.xgf.util;
 
 import com.xgf.file.FileUtil;
+import com.xgf.system.SystemUtil;
 import org.junit.Test;
 
 import java.io.File;
@@ -29,12 +30,18 @@ public class FileUtilTest {
     }
 
     @Test
-    public void tesFfileAppendData() {
+    public void testFileAppendData() {
         File file = FileUtil.createFileBySysTime(FILE_MAC_SOURCE_PATH, "txt");
         System.out.println("file path = " + file.getPath());
         FileUtil.fileAppendData(file, "\r\n我要添加内容");
     }
 
+    @Test
+    public void testFileAppendData2() {
+        String pathUrl = SystemUtil.getCurrentDir() + SystemUtil.getFileSeparator() + "testFileAppendData2.txt";
+        System.out.println("file path = " + pathUrl);
+        FileUtil.fileAppendData(pathUrl, "\r\n我要添加内容");
+    }
 
 
 }

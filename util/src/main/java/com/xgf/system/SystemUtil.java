@@ -85,4 +85,11 @@ public class SystemUtil {
         return getSystemProperty("file.separator");
     }
 
+    /**
+     * @return 获取当前工作目录
+     */
+    public static String getCurrentDir() {
+        return System.getProperty("user.dir");
+    }
+
 }
