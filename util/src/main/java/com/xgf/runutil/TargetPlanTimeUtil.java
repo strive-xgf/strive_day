@@ -36,7 +36,7 @@ public class TargetPlanTimeUtil {
     /**
      * 关闭退出（全局退出程序使用）【String类型】
      */
-    private static final String EXIT_STR = "exit_finishPlan";
+    private static final String EXIT_STR = "exit_finishPlan_2e6288aabb736a29baf928b189fb71c6";
 
     /**
      * 关闭退出（全局退出程序使用）【int类型】
@@ -85,16 +85,19 @@ public class TargetPlanTimeUtil {
         // 获取页面输入目标计时时间值
         int inputTargetTime = 0;
 
+        if (!EXIT_STR.equalsIgnoreCase(inputTargetStr)) {
+            // 不退出，输入时间
+            inputTargetTime = getInputTargetTime();
+        }
+
         // 记录开始使用运行时间
         saveLog("########## 开始使用plan time，目标: " + inputTargetStr + ", 时间: " + sdf.format(runInitTime) + "\n");
 
-        while (!(EXIT_STR.equalsIgnoreCase(inputTargetStr)
-                || "END".equalsIgnoreCase(inputTargetStr))
+        while (!EXIT_STR.equalsIgnoreCase(inputTargetStr)
                 && inputTargetTime != EXIT_INT) {
-            inputTargetTime = getInputTargetTime(null);
             // 每次循环执行开始时间（包含非任务时间）
             Date onceStartTime = new Date();
-            System.out.println("====== execute inputTargetTime = " + inputTargetTime);
+            System.out.println("====== execute inputTargetStr " + inputTargetStr + ", inputTargetTime = " + inputTargetTime);
 
             // 异步线程调用倒计时时钟（实时倒计时面板）
             new Thread(new TimeJFrameUtil(inputTargetTime * 1000L)).start();
@@ -136,30 +139,27 @@ public class TargetPlanTimeUtil {
                 break;
             }
 
-            // 选择按钮（两个: 是/否；返回1或0）0代表是，1代表否
-            int confirm = JOptionPane.showConfirmDialog(null,
-                    "<html>当前为第 <font color='red'>" + executeCount + " </font>次计时，开始时间: <font color='red'>" + sdf.format(onceStartTime) + "</font>，结束时间: <font color='red'>" + sdf.format(onceEndTime) + "</font></html>" +
-                            "\n>>>>>>本次计时时间: " + inputTargetTime + "秒，目标: " + inputTargetStr + "，完成度: " + selectPercent + "\n" +
-                            "\n======历史记录======\n" +
-                            allExecuteResultSb +
-                            "\n==================" +
-                            afterOnceResultStr +
-                            "\n是否需要延迟？", "时间到啦！！！",
-                    JOptionPane.YES_NO_CANCEL_OPTION);
+            // 展示内容
+            String showPanel = "<html>当前为第 <font color='red'>" + executeCount + " </font>次计时，开始时间: <font color='red'>" + sdf.format(onceStartTime) + "</font>，结束时间: <font color='red'>" + sdf.format(onceEndTime) + "</font></html>" +
+                    "\n>>>>>>本次计时时间: " + inputTargetTime + "秒，目标: " + inputTargetStr + "，完成度: " + selectPercent + "\n" +
+                    "\n======历史记录======\n" +
+                    allExecuteResultSb +
+                    "\n==================" +
+                    afterOnceResultStr +
+                    "\n是否需要延迟？";
 
-            // 是否继续
-            if (confirm == 2) {
-                // 2: 取消
-                JOptionPane.showMessageDialog(null, "感谢您的使用，欢迎您下次继续使用^=^", "感谢提示", JOptionPane.INFORMATION_MESSAGE);
+            // 展示面板
+            int confirm = getYesOrNoShowPlane(showPanel, "时间到啦");
+            if (confirm == EXIT_INT) {
                 // 设为 EXIT_INT 退出循环
                 inputTargetTime = EXIT_INT;
             } else if (confirm == 1) {
                 // 1: 否，延迟继续
                 inputTargetStr = getInputTarget();
-                inputTargetTime = getInputTargetTime(null);
+                inputTargetTime = getInputTargetTime();
             } else {
                 // 0: 是
-                inputTargetTime = getInputTargetTime(null);
+                inputTargetTime = getInputTargetTime();
             }
         }
 
@@ -197,6 +197,10 @@ public class TargetPlanTimeUtil {
     }
 
 
+    private static int getInputTargetTime() {
+        return getInputTargetTime(null);
+    }
+    
     /**
      * 输入目标计划时间
      *
@@ -216,7 +220,7 @@ public class TargetPlanTimeUtil {
                 return EXIT_INT;
             }
             // 不关闭，继续输入
-            return getInputTargetTime(null);
+            return getInputTargetTime();
         }
 
         // 表达式/时间的 double 结果
@@ -387,14 +391,42 @@ public class TargetPlanTimeUtil {
      * @return true: 退出，false: 继续使用
      */
     private static boolean judgeExit() {
-        // 选择按钮（两个: 是/否；返回1或0）0代表是，1代表否
+        // 选择按钮（两个: 是/否；返回1或0）0代表是，1代表否, -1点x关闭
         int confirmFlag = JOptionPane.showConfirmDialog(null, "是否退出使用？", "结束提示", JOptionPane.YES_NO_OPTION);
-        if (confirmFlag == 0) {
+        if (confirmFlag == 0 || confirmFlag == -1) {
             //普通提示框
             JOptionPane.showMessageDialog(null, "感谢您的使用欢迎您下次继续使用", "感谢提示", JOptionPane.INFORMATION_MESSAGE);
             return true;
         }
         return false;
+    }
+
+    /**
+     * 获取展示面板（是/否）
+     *
+     * @param message 内容
+     * @param title 标题
+     * @return 1 : 否, 0 : 是, EXIT_INT : 退出x
+     */
+    private static int getYesOrNoShowPlane(String message, String title) {
+
+        int confirm = -1;
+
+        // 循环直到退出或继续使用
+        while (confirm == -1) {
+            // 1 : 否, 0 : 是, -1 : 退出x
+            confirm = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
+            if (confirm == -1) {
+                if (judgeExit()) {
+                    // 退出
+                    return EXIT_INT;
+                }
+                // 继续展示弹框判断
+                getYesOrNoShowPlane(message, title);
+            }
+        }
+
+        return confirm;
     }
 
 }
