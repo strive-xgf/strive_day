@@ -20,6 +20,9 @@ custom:
       lockLogFlag: true
       # 请求版本号校验开启日志打印，true: 开启
       requestVersionLogFlag: true
+      file:
+        # 文件重命名日志
+        fileReNameLogFlag: true
     # guava-retry 重试机制
     guava:
       retry:

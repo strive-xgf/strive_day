@@ -64,6 +64,7 @@ public class SystemUtil {
     /**
      * 获取行分隔符
      * @return windows 下是 \r\n，在Linux下面是 \n， 在Mac下是 \r
+     *      // return System.lineSeparator();
      */
     public static String getLineSeparator(){
         return getSystemProperty("line.separator");
@@ -91,5 +92,4 @@ public class SystemUtil {
     public static String getCurrentDir() {
         return System.getProperty("user.dir");
     }
-
 }

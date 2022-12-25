@@ -2,6 +2,7 @@ package com.xgf.file;
 
 import com.xgf.constant.StringConstantUtil;
 import com.xgf.exception.CustomExceptionEnum;
+import com.xgf.java8.BranchHandleUtil;
 import com.xgf.system.SystemUtil;
 import org.apache.commons.lang3.StringUtils;
 
@@ -131,7 +132,25 @@ public class FileUtil {
     }
 
     /**
+     * 向文件追加数据，路径不存在或非文件抛出异常
+     *
+     * @param file 文件
+     * @param data 数据
+     */
+    public static void fileAppendDataThrow(File file, String data) {
+
+        // 是文件记录到指定文件中，不是文件抛出异常
+        BranchHandleUtil.isTrueOrFalse(file.exists() && file.isFile())
+                .handle(() -> FileUtil.fileAppendData(file, data),
+                        (() -> {
+                            throw CustomExceptionEnum.FILE_ILLEGAL_EXCEPTION.generateCustomMessageException(file.getPath() + file.getName() + " 非法文件异常");
+                        }));
+    }
+
+
+    /**
      * 向文件追加数据
+     *
      * @param file 文件
      * @param data 数据
      */
@@ -148,5 +167,31 @@ public class FileUtil {
 
     }
 
+
+
+    /**
+     * 判断文件类型和目标类型是否一致（只是文件后缀的判断，没有判断具体的文件类型[更改文件后缀的情况]）
+     *
+     * @param file       文件
+     * @param targetType 目标类型
+     * @return true: 文件类型和目标类型一致
+     */
+    protected static boolean judgeFileTypeSuffix(File file, String targetType) {
+        if (file == null || targetType == null) {
+            return false;
+        }
+
+        if (!file.isFile()) {
+            return false;
+        }
+
+        String fileName = file.getName();
+        int dotSuffixIndex = fileName.lastIndexOf(".");
+
+        if (dotSuffixIndex == -1) {
+            return false;
+        }
+        return targetType.equals(fileName.substring(dotSuffixIndex + 1));
+    }
 
 }
