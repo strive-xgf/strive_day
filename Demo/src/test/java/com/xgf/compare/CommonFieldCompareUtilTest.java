@@ -1,6 +1,6 @@
 package com.xgf.compare;
 
-import com.xgf.bean.User2;
+import com.xgf.bean.User;
 import com.xgf.common.JsonUtil;
 import com.xgf.create.CreateRandomObjectUtil;
 import org.junit.Test;
@@ -17,8 +17,8 @@ public class CommonFieldCompareUtilTest {
 
     @Test
     public void test() {
-        User2 user21 = CreateRandomObjectUtil.createData(User2.class);
-        User2 user22 = CreateRandomObjectUtil.createData(User2.class);
+        User user21 = CreateRandomObjectUtil.createData(User.class);
+        User user22 = CreateRandomObjectUtil.createData(User.class);
         user21.setAge(null);
         user21.setUserUuid(null);
         user21.setStringList(Arrays.asList("1", "2", "8", "第一", "第二", "第三"));

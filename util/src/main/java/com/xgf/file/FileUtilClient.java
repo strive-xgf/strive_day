@@ -60,7 +60,7 @@ public class FileUtilClient {
 //        int finalReNameFileCount = reNameFileCount;
         BooleanFunctionUtil.trueRunnable(addReNameLogFile != null).run(() ->
                 FileUtil.fileAppendDataThrow(addReNameLogFile,  "execute fileReName end, path = " + path + ", time = "
-                        + DateUtil.dateFormatString(new Date(endTime), DateUtil.FORMAT_MILL) + ", reNameFileCount =" + reNameFileCount + String.valueOf(reNameFileCount) + ", cost = " + (endTime - startTime) + " ms " + SystemUtil.getLineSeparator() + SystemUtil.getLineSeparator()));
+                        + DateUtil.dateFormatString(new Date(endTime), DateUtil.FORMAT_MILL) + ", reNameFileCount = " + reNameFileCount + ", cost = " + (endTime - startTime) + " ms " + SystemUtil.getLineSeparator() + SystemUtil.getLineSeparator()));
 
         return reNameFileCount;
     }
