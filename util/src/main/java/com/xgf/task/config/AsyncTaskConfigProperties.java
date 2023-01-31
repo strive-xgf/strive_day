@@ -34,7 +34,7 @@ public class AsyncTaskConfigProperties {
         /**
          * 缓存队列（阻塞队列）当核心线程数达到最大时，新任务会放在队列中排队等待执行
          */
-        public static final int QUEUE_CAPACITY = 100;
+        public static final int QUEUE_CAPACITY = 300;
 
         /**
          * 允许线程空闲时间

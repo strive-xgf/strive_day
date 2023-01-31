@@ -44,4 +44,13 @@ public class FileUtilTest {
     }
 
 
+    @Test
+    public void testCreateFileDir() {
+        FileUtil.createFileDir("F:\\wqq\\Demo\\a");
+        FileUtil.createFileDir("F:\\wqq\\Demo\\b");
+        FileUtil.createFileDir("F:\\wqq\\Demo\\a");
+        FileUtil.createFileDir("F:\\wqq\\Demo\\b");
+    }
+
+
 }

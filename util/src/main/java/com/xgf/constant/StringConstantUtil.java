@@ -1,10 +1,13 @@
 package com.xgf.constant;
 
+import com.xgf.exception.CustomExceptionEnum;
+import com.xgf.java8.BooleanFunctionUtil;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author xgf
@@ -19,6 +22,10 @@ public class StringConstantUtil {
     public static final String COMMA = ",";
     public static final String DOT = ".";
     public static final String POUND = "#";
+    public static final String ADD = "+";
+    public static final String SUBTRACT = "-";
+    public static final String UNDERLINE = "_";
+    public static final String EQUALS_SIGN = "=";
     public static final String DOWN_DIAGONAL = "\\";
     public static final String UP_DIAGONAL = "/";
     public static final String LEFT_SMALL_BRACKET = "(";
@@ -158,6 +165,20 @@ public class StringConstantUtil {
     }
 
     /**
+     * 判断字符串是否以 startStr开头，是的话直接返回，否则添加这个开头
+     *
+     * @param str 字符串
+     * @param startStr 开头前缀
+     * @return 以 startStr 开头的字符串
+     */
+    public static String defaultStartWith(String str, String startStr) {
+        if (str.startsWith(startStr)) {
+            return str;
+        }
+        return startStr + str;
+    }
+
+    /**
      * 字符串列表 添加前后缀
      * @param sb StringBuilder
      * @param strList 字符串数组
@@ -222,6 +243,19 @@ public class StringConstantUtil {
         return StringUtils.join(dataList, separator);
     }
 
+
+    /**
+     * List 转 String （不保留数组形式）
+     *
+     * @param dataList List 数据
+     * @param separator 分隔符
+     * @return String字符串
+     */
+    public static String listToString2(List<?> dataList, Object separator) {
+        StringBuilder sb = new StringBuilder();
+        Optional.ofNullable(dataList).orElseGet(ArrayList::new).forEach(p -> sb.append(p).append(separator));
+        return sb.toString();
+    }
 
     /**
      * 校验字符串全为数字
@@ -294,6 +328,86 @@ public class StringConstantUtil {
         }
 
         return str.matches(regex);
+    }
+
+
+    /**
+     * 数字前置填充0，补齐位数（若当前数字位数 > 补齐后位数，则直接返回原数值）
+     *
+     * @param num 需要补齐的数值
+     * @param length 补齐后希望长度
+     * @return 补齐后的字符串
+     */
+    public static String preFillZero(int num, int length) {
+        BooleanFunctionUtil.trueRunnable(length <= 0).run(() -> {throw CustomExceptionEnum.PARAM_TYPE_ILLEGAL_EXCEPTION.generateException(" length = " + length);});
+        // %0[x]d
+        return String.format("%0".concat(String.valueOf(length)).concat("d"), num);
+    }
+
+
+    public static String substringByPreSuf(String str, String prefix, String suffix) {
+        return StringConstantUtil.substringByPreSuf(str, prefix, suffix, true);
+    }
+
+    /**
+     * 截取 str 指定内容包含的值, eg: 123[456]78]9，截取 []， 则值为[456]78]
+     *
+     * @param str 字符串
+     * @param prefix 指定最先出现的值
+     * @param suffix 指定最后出现的值
+     * @param containPreSufFlag 是否包含前后缀内容， eg: 123[456]78]9，截取 []，包含则值为[456]78]，不包含则为: 456]78
+     * @return
+     */
+    public static String substringByPreSuf(String str, String prefix, String suffix, boolean containPreSufFlag) {
+        // 找到 [ 最先开始的下标
+        int prefixIndex = str.indexOf(prefix);
+        if (prefixIndex == -1) {
+            return null;
+        }
+        // 找到 ] 最后结束的下标
+        int suffixIndex = str.lastIndexOf(suffix);
+        if (suffixIndex == -1) {
+            return null;
+        }
+        // 包含前后缀
+        if (containPreSufFlag) {
+            return str.substring(prefixIndex, suffixIndex + 1);
+        }
+        return str.substring(prefixIndex + 1, suffixIndex);
+    }
+
+
+    public static String replaceStrByMap(String str, Map<String, String> replaceMap) {
+        List<String> resultList = replaceStrByMap(Collections.singletonList(str), replaceMap);
+
+        if (CollectionUtils.isEmpty(resultList)) {
+            return null;
+        }
+
+        return resultList.get(0);
+    }
+
+
+    /**
+     * 根据 map 替换字符串信息指定内容
+     *
+     * @param strList 被处理的字符串集合
+     * @param replaceMap 内容替换map集合, key: 替换前的字符串，支持正则表达式， value: 替换后的值
+     */
+    public static List<String> replaceStrByMap(List<String> strList, Map<String, String> replaceMap) {
+
+        if (CollectionUtils.isEmpty(strList) || MapUtils.isEmpty(replaceMap)) {
+            return strList;
+        }
+
+        List<String> resultList = strList;
+        for (Map.Entry<String, String> entry : replaceMap.entrySet()) {
+            // 替换文本内容
+            resultList = resultList.stream().filter(StringUtils::isNotBlank)
+                    .map(p -> p.replaceAll(entry.getKey(), entry.getValue())).collect(Collectors.toList());
+        }
+
+        return resultList;
     }
 
 

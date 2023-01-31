@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 @Getter
 @AllArgsConstructor
 public enum CustomExceptionEnum implements EnumBase {
+    UNIT_TEST_EXCEPTION("unitTestException", "单元测试异常"),
     PARAM_VALUE_CAN_NOT_NULL_EXCEPTION("paramValueCanNotNullException", "参数不能为空异常"),
     PARAM_TYPE_ILLEGAL_EXCEPTION("paramTypeIllegalException", "参数类型不合法异常"),
     ENUM_TYPE_ILLEGAL_EXCEPTION("enumTypeIllegalException", "枚举类型不合法"),

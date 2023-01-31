@@ -3,12 +3,13 @@ package com.xgf.file;
 import com.xgf.constant.StringConstantUtil;
 import com.xgf.exception.CustomExceptionEnum;
 import com.xgf.java8.BranchHandleUtil;
+import com.xgf.java8.ThrowExceptionFunctionUtil;
 import com.xgf.system.SystemUtil;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.Objects;
 import java.util.TimeZone;
@@ -77,6 +78,27 @@ public class FileUtil {
 
 
     /**
+     * 创建文件目录
+     *
+     * @param dirPath 文件目录路径
+     * @return File
+     */
+    public static File createFileDir(String dirPath) {
+
+        File file = new File(dirPath);
+
+        if (!file.exists()) {
+            // 创建目录
+            if (!file.mkdirs()) {
+                // 文件目录创建失败（多线程环境，可能被其它线程创建，校验文件是否存在，不存在再抛出异常
+                ThrowExceptionFunctionUtil.isFalseThrow(file.exists()).throwMessage("文件目录创建异常，file path = " + dirPath);
+            }
+        }
+
+        return file;
+    }
+
+    /**
      * 创建目录和文件
      *
      * @param url 路径url
@@ -89,7 +111,8 @@ public class FileUtil {
         if (!file.getParentFile().exists()) {
             // 创建父级目录
             if (!file.getParentFile().mkdirs()) {
-                throw CustomExceptionEnum.FILE_CREATE_EXCEPTION.generateException("dir path = " + url);
+                // 文件目录创建失败（多线程环境，可能被其它线程创建，校验文件是否存在，不存在再抛出异常
+                ThrowExceptionFunctionUtil.isFalseThrow(file.getParentFile().exists()).throwMessage("文件目录创建异常，file path = " + url);
             }
         }
 
@@ -97,13 +120,49 @@ public class FileUtil {
             try {
                 // 创建文件
                 if (!file.createNewFile()) {
-                    throw CustomExceptionEnum.FILE_CREATE_EXCEPTION.generateException("file path = " + url);
+                    // 文件创建失败判断文件是否已存在，不存在抛出异常
+                    ThrowExceptionFunctionUtil.isFalseThrow(file.exists()).throwMessage("文件创建异常，file path = " + url);
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
         return file;
+    }
+
+
+    /**
+     * 文件路径，替换特殊字符为空
+     *      windows 文件名不能包含下列任何字符:  \/:*?"<>|
+     *
+     * @param filePath 文件路径、
+     * @return 替换后的文件路径
+     */
+    public static String replaceAllSpecialFileChar(String filePath) {
+
+        if (StringUtils.isBlank(filePath)) {
+            return filePath;
+        }
+
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < filePath.length(); i++) {
+            // 特殊文件字符替换为空
+            char current = filePath.charAt(i);
+            if (current == '\\'
+                    || current == '/'
+                    || current == '*'
+                    || current == ':'
+                    || current == '?'
+                    || current == '"'
+                    || current == '<'
+                    || current == '>'
+                    || current == '|') {
+                continue;
+            }
+            sb.append(current);
+        }
+
+        return sb.toString();
     }
 
 
@@ -167,6 +226,39 @@ public class FileUtil {
 
     }
 
+    public static void downloadImgByUrl(String urlStr, String filePath) throws Exception {
+        FileUtil.downloadImgByUrl(urlStr, filePath, null);
+    }
+
+    /**
+     * 通过 url 下载指定网页图片到存储路径
+     *
+     * @param urlStr           网页url地址
+     * @param filePath         文件下载路径
+     * @param reqHeadUserAgent 模拟请求头 user-agent 参数，避免403异常
+     * @throws Exception 异常信息 （异常重试机制配置）
+     */
+    public static void downloadImgByUrl(String urlStr, String filePath, String reqHeadUserAgent) throws Exception {
+
+        URL url = new URL(urlStr);
+        URLConnection urlConnection = url.openConnection();
+        // Server returned HTTP response code: 403 for URL（403 无权限），设置请求头 User-Agent 属性来模拟浏览器运行
+        if (reqHeadUserAgent != null) {
+            urlConnection.setRequestProperty("User-Agent", reqHeadUserAgent);
+        }
+
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(urlConnection.getInputStream());
+        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(FileUtil.createFileAndDir(filePath)));
+
+        byte[] bytes = new byte[1024];
+        int len;
+        while ((len = bufferedInputStream.read(bytes)) != -1) {
+            bufferedOutputStream.write(bytes, 0, len);
+        }
+
+        bufferedInputStream.close();
+        bufferedOutputStream.close();
+    }
 
 
     /**

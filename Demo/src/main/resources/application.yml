@@ -23,6 +23,9 @@ custom:
       file:
         # 文件重命名日志
         fileReNameLogFlag: true
+      crawler:
+        # 爬虫日志
+        crawlerLogFlag: true
     # guava-retry 重试机制
     guava:
       retry:
@@ -39,8 +42,41 @@ custom:
         apis:
           - com.xgf.mvc.controller.GuavaRetryDemoController.testGuavaRetryBaseConfig
           - com.xgf.mvc.controller.GuavaRetryDemoController.testGuavaRetryBaseAnnotation
+#          - com.xgf.file.FileUtil.downloadImgByUrl
     # 访问请求配置
     request:
       # 请求版本Map配置
       versionMap: "{'demoVersionConfig':'22.33.55', 'b':'22.33.66', 'c':'22.33.77', 'd':'22.33.88'}"
+
+    # 爬虫配置
+    crawler:
+      # 属性
+      properties:
+        # 浏览器类型 chrome / ie / firefox / edge ...
+        browserType: 'chrome'
+        # 浏览器驱动路径 webdriver todo 自动获取
+        webDriverPath: 'E:\\000common file\\driver\\browser\\chrome\\chromedriver.exe'
+        # Server returned HTTP response code: 403 for URL（403 无权限），设置请求头 User-Agent 属性来模拟浏览器运行
+        reqHeadParamUserAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
+        # 网页url集合，可以多个网址，支持通配符(暂时只支持数字，格式如：[1-100]），eg: xxx/yy[1-100]，解析之后就是 xxx/yy1 、 xxx/yy2、...、xxx/yy100
+        webPageUrlList:
+          - https://wall.alphacoders.com/by_sub_category.php?id=359802&name=Hi-Fi+Rush+Wallpapers
+        # 本地下载路径
+        downloadPath: 'F:\\wqq\\image22'
+
+        # 图片
+        img:
+          # 图片格式（jpg/png等）
+          format: 'jpg'
+          # 图片路径前缀添加（eg: 网页相对路径 /xx/xx）
+          urlPreAppend: ''
+          # 不包括的图片路径集合
+          excludeUrls:
+            - https://static.alphacoders.com/wa/English-flag.png
+
+
+
+
+
+
 
