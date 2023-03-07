@@ -1,6 +1,9 @@
 package com.xgf.crawler.inner;
 
 import com.google.common.collect.Lists;
+import com.xgf.common.LogUtil;
+import com.xgf.exception.CustomExceptionEnum;
+import com.xgf.system.SystemUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -107,6 +110,25 @@ public class CrawlerJsoupCommonUtil {
      */
     public static Connection getConnectWithWebPage(String targetUrl, Integer timeout) {
         return getConnectWithWebPage(targetUrl, timeout, null);
+    }
+
+    /**
+     * 增加重试次数
+     * @param retryCount 重试次数
+     */
+    public static Connection.Response getResponseWithWebPageRetry(String targetUrl,
+                                                        Integer retryCount,
+                                                        Integer timeout,
+                                                        String reqHeadUserAgent) {
+        for (int i = 1; i <= retryCount; i++) {
+            try {
+                return getConnectWithWebPage(targetUrl, timeout, reqHeadUserAgent).execute();
+            } catch (Exception e) {
+                LogUtil.info("第" + i + "次获取连接失败，targetUrl = " + targetUrl + SystemUtil.getLineSeparator() + "\t exception message = " + e.getLocalizedMessage());
+            }
+        }
+        // 重试次数结束，抛出异常
+        throw CustomExceptionEnum.URL_CONNECTION_EXCEPTION.generateException();
     }
 
     /**

@@ -10,9 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Calendar;
-import java.util.Objects;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * @author xgf
@@ -285,5 +283,24 @@ public class FileUtil {
         }
         return targetType.equals(fileName.substring(dotSuffixIndex + 1));
     }
+
+    /**
+     * @param pathNames 文件路径分段
+     * @return 拼接好的文件路径信息
+     */
+    public static String assembleFilePath(String... pathNames) {
+        StringBuilder sb = new StringBuilder();
+        Arrays.stream(pathNames)
+                .filter(StringConstantUtil::isNotBlank)
+                // 去掉所有字符串结尾的文件分隔符
+                .map(p -> StringConstantUtil.endTrimSweep(p, SystemUtil.getFileSeparator()))
+                .forEach(pathName -> {
+                    // 默认文件分隔符开头
+                    sb.append(StringConstantUtil.defaultStartWith(pathName, SystemUtil.getFileSeparator()));
+                });
+        return sb.toString();
+
+    }
+
 
 }

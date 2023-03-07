@@ -78,6 +78,11 @@ public class StringConstantUtil {
      */
     public static final String MATCH_CHINESE = "[\\u4E00-\\u9FA5]+";
 
+    /**
+     * 正则: 匹配URL链接
+     */
+    public static final String MATCH_URL = "^(http|https)://.+";
+
     // ---------- request header key start -----------
 
     /**
@@ -317,6 +322,15 @@ public class StringConstantUtil {
     }
 
     /**
+     * 校验字符串是否为url链接
+     * @param str 字符串
+     * @return true: url地址合法
+     */
+    public static boolean checkStrIsURL(String str){
+        return checkStrIsMatches(str, MATCH_URL);
+    }
+
+    /**
      * 校验字符串是否符合正则表达式
      * @param str 字符串
      * @param regex 正则表达式
@@ -409,6 +423,29 @@ public class StringConstantUtil {
 
         return resultList;
     }
+
+
+
+
+
+
+
+
+
+
+    //  >>>>>>>>>> 封装 <<<<<<<<<<
+    public static boolean isBlank(String str) {
+        return StringUtils.isBlank(str);
+    }
+
+    public static boolean isNotBlank(String str) {
+        return StringUtils.isNotBlank(str);
+    }
+
+    public static <T extends CharSequence> T defaultIfBlank(T str, T defaultValue) {
+        return StringUtils.defaultIfBlank(str, defaultValue);
+    }
+
 
 
 }

@@ -175,4 +175,15 @@ public class JsonUtil {
         }
     }
 
+    /**
+     * 将一个 json 字符串，转换为 JSONObject json对象
+     *
+     * @param json json 字符串
+     * @return JSONObject 对象
+     */
+    public static JSONObject parseObject(String json) {
+        return JSON.parseObject(json);
+    }
+
+
 }
