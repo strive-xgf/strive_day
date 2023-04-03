@@ -1,5 +1,7 @@
 package com.xgf.constant;
 
+import com.xgf.constant.enumclass.LetterTypeEnum;
+import com.xgf.convert.CommonStringConvertUtil;
 import com.xgf.exception.CustomExceptionEnum;
 import com.xgf.java8.BooleanFunctionUtil;
 import org.apache.commons.collections.CollectionUtils;
@@ -427,9 +429,36 @@ public class StringConstantUtil {
 
 
 
+    /**
+     * 字符串首字母大写
+     *
+     * @param str 字符串入参
+     * @return 首字母大写的字符串
+     */
+    public static String firstLetterUpperCase(String str) {
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    /**
+     * 字符串首字母小写
+     *
+     * @param str 字符串入参
+     * @return 首字母小写的字符串
+     */
+    public static String firstLetterLowerCase(String str) {
+        return str.substring(0, 1).toLowerCase() + str.substring(1);
+    }
 
 
-
+    /**
+     * 驼峰表达式，转换为下划线格式 eg：aaBbCcDEFLetter > aa_bb_cc_d_e_f_letter
+     *
+     * @param str 参数字符串str
+     * @return 转换后的下划线格式
+     */
+    public static String humpToUnderLine(String str) {
+        return CommonStringConvertUtil.humpToFormat(str, StringConstantUtil.UNDERLINE, LetterTypeEnum.ALL_LETTER_LOWERCASE);
+    }
 
 
 
@@ -446,6 +475,9 @@ public class StringConstantUtil {
         return StringUtils.defaultIfBlank(str, defaultValue);
     }
 
+    public static <T> String join(T... elements) {
+        return StringUtils.join(elements);
+    }
 
 
 }
