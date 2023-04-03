@@ -4,10 +4,9 @@ import com.xgf.common.LogUtil;
 import com.xgf.exception.CustomExceptionEnum;
 import com.xgf.file.FileUtil;
 import com.xgf.system.SystemUtil;
+import org.apache.commons.lang3.BooleanUtils;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -19,7 +18,7 @@ import java.net.URLConnection;
 public class CrawlerCommonUtil {
 
     public Integer downloadByUrl(String urlStr, String filePath) throws Exception {
-        return CrawlerCommonUtil.downloadByUrl(urlStr, filePath, null);
+        return CrawlerCommonUtil.downloadByUrl(urlStr, filePath, false, null);
     }
 
     /**
@@ -31,7 +30,7 @@ public class CrawlerCommonUtil {
 
         for (int i = 1; i <= retryCount; i++) {
             try {
-                return CrawlerCommonUtil.downloadByUrl(urlStr, filePath, reqHeadUserAgent);
+                return CrawlerCommonUtil.downloadByUrl(urlStr, filePath, Boolean.FALSE, reqHeadUserAgent);
             } catch (Exception e) {
                 LogUtil.info("第" + i + "次获取连接失败，targetUrl = " + urlStr + SystemUtil.getLineSeparator() + "\t exception message = " + e.getLocalizedMessage());
             }
@@ -41,16 +40,21 @@ public class CrawlerCommonUtil {
         throw CustomExceptionEnum.URL_CONNECTION_EXCEPTION.generateException();
     }
 
-        /**
-         * 通过 url 下载指定网页信息到到存储路径
-         *
-         * @param urlStr           网页url地址
-         * @param filePath         文件下载路径
-         * @param reqHeadUserAgent 模拟请求头 user-agent 参数，避免403异常
-         * @return 返回目标文件字节数
-         * @throws Exception 异常信息 （异常重试机制配置）
-         */
-    public static Integer downloadByUrl(String urlStr, String filePath, String reqHeadUserAgent) throws Exception {
+    /**
+     * 通过 url 下载指定网页信息到到存储路径
+     *
+     * @param urlStr           网页url地址
+     * @param filePath         文件下载路径
+     * @param existCoverFlag   文件存在是否覆盖标识
+     * @param reqHeadUserAgent 模拟请求头 user-agent 参数，避免403异常
+     * @return 返回目标文件字节数
+     * @throws Exception 异常信息 （异常重试机制配置）
+     */
+    public static Integer downloadByUrl(String urlStr, String filePath, Boolean existCoverFlag, String reqHeadUserAgent) throws Exception {
+
+        if (BooleanUtils.isNotTrue(existCoverFlag) && new File(filePath).exists()) {
+            LogUtil.info("file exist , path = {}", filePath);
+        }
 
         int downloadByteCount = 0;
 
