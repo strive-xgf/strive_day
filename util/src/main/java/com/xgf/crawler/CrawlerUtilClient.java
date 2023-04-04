@@ -99,6 +99,7 @@ public class CrawlerUtilClient {
     /**
      * 批量下载图片
      * 日志路径: saveDirPath 目录下的 CRAWLER_LOG_FILE_NAME 的.txt 文件
+     *  下载图片，也可以使用这个：{@link com.xgf.crawler.CrawlerUtilClient#batchDownloadByUrlWithJsoup}
      *
      * @param targetUrlList        目标网址url 集合
      * @param saveDirPath      图片存储路径
@@ -124,6 +125,25 @@ public class CrawlerUtilClient {
             FileUtil.fileAppendData(saveDirPath + SystemUtil.getFileSeparator() + CrawlerImgUtil.CRAWLER_LOG_FILE_NAME + ".txt",
                     "targetUrlList = " + StringConstantUtil.listToString(targetUrlList) + StringConstantUtil.stringAppendChineseMidBracket("exception : " + e.getLocalizedMessage())
                             + ", time = " + DateUtil.dateFormatString(new Date(), DateUtil.FORMAT_SECOND) + SystemUtil.getLineSeparator());
+        }
+    }
+
+
+    /**
+     * 批量下载网页信息
+     *
+     * @param urlList          url集合
+     * @param saveDir          文件存储目录  【最终存储路径：saveDir > 网页title_随机8位uuid字符串.format】
+     * @param format           文件格式 eg: .txt、.jpg等
+     * @param threadCount      线程数（批量下载数，暂时最大支持100，默认1）
+     * @param existCoverFlag   目录存在是否覆盖，true：覆盖，false：不覆盖（不执行）
+     * @param reqHeadUserAgent 请求头参数
+     */
+    public static void batchDownloadByUrlWithJsoup(List<String> urlList, String saveDir, String format, Integer threadCount, Boolean existCoverFlag, String reqHeadUserAgent) {
+        try {
+            CrawlerJsoupCommonUtil.batchDownloadByUrlWithJsoup(urlList, saveDir, format, threadCount, existCoverFlag, reqHeadUserAgent);
+        } catch (Exception e) {
+            LogUtil.warn("batchDownloadByUrlWithRetry execute exception message = {}, exception = {}", e);
         }
     }
 

@@ -186,6 +186,20 @@ public class StringConstantUtil {
     }
 
     /**
+     * 判断字符串是否以 endStr 结束，是的话直接返回，否则添加这个到末尾
+     *
+     * @param str    字符串
+     * @param endStr 结束前缀
+     * @return 以 endStr 结束的字符串
+     */
+    public static String defaultEndWith(String str, String endStr) {
+        if (str.endsWith(endStr)) {
+            return str;
+        }
+        return str + endStr;
+    }
+
+    /**
      * 字符串列表 添加前后缀
      * @param sb StringBuilder
      * @param strList 字符串数组

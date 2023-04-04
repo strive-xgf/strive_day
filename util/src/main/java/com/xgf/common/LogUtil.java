@@ -1,6 +1,8 @@
 package com.xgf.common;
 
 import com.xgf.constant.StringConstantUtil;
+import com.xgf.java8.BooleanFunctionUtil;
+import com.xgf.system.SystemUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,6 +57,24 @@ public class LogUtil {
 
     public static void errorParam(Object...objects) {
         log.error(getLogParamInfo(getStackTrace(3),objects));
+    }
+
+    /**
+     * 满足 true / false 条件 则记录日志
+     */
+    public static void trueInfo(Boolean flag, String template, Object ...objects) {
+        BooleanFunctionUtil.trueRunnable(flag).run(() ->log.info(convertTemplate(template), convertParamToArray(objects)));
+    }
+    public static void falseInfo(Boolean flag, String template, Object ...objects) {
+        BooleanFunctionUtil.falseRunnable(flag).run(() ->log.info(convertTemplate(template), convertParamToArray(objects)));
+
+    }
+
+    public static void trueWarn(Boolean flag, String template, Object ...objects) {
+        BooleanFunctionUtil.trueRunnable(flag).run(() ->log.warn(convertTemplate(template), convertParamToArray(objects)));
+    }
+    public static void falseWarn(Boolean flag, String template, Object ...objects) {
+        BooleanFunctionUtil.falseRunnable(flag).run(() ->log.warn(convertTemplate(template), convertParamToArray(objects)));
     }
 
 
@@ -201,7 +221,8 @@ public class LogUtil {
         // 异常类打印异常堆栈信息
         if (object instanceof Exception) {
             Exception exception = (Exception) object;
-            sb.append(StringConstantUtil.EXIST).append(StringConstantUtil.BLANK).append(StringConstantUtil.EXCEPTION).append(exception.getLocalizedMessage());
+            sb.append(StringConstantUtil.EXIST).append(StringConstantUtil.BLANK).append(StringConstantUtil.EXCEPTION)
+                    .append(StringConstantUtil.CHINESE_COLON).append(exception.getLocalizedMessage()).append(SystemUtil.getLineSeparator());
             StringWriter sw = new StringWriter();
             // 异常详细信息输出
             PrintWriter pw = new PrintWriter(sw,true);

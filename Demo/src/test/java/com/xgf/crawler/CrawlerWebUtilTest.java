@@ -1,10 +1,13 @@
 package com.xgf.crawler;
 
 import com.google.common.collect.Lists;
+import com.xgf.DemoApplication;
 import com.xgf.certificate.SslCertificateUtil;
+import com.xgf.common.LogUtil;
 import com.xgf.constant.StringConstantUtil;
 import com.xgf.crawler.inner.CrawlerImgUtil;
 import com.xgf.date.DateUtil;
+import com.xgf.exception.CustomExceptionEnum;
 import com.xgf.randomstr.RandomStrUtil;
 import com.xgf.system.SystemUtil;
 import com.xgf.task.TaskUtil;
@@ -12,14 +15,17 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 
 import java.io.File;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -27,7 +33,8 @@ import java.util.stream.Collectors;
  * @create 2023-04-03 2:25
  * @description 爬虫网站实操案例
  */
-
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = DemoApplication.class)
 public class CrawlerWebUtilTest {
 
     /**
@@ -113,6 +120,129 @@ public class CrawlerWebUtilTest {
 
     }
 
+
+
+
+
+    @Test
+    public void test_wallhaven() {
+        crawlerWallhavenImg("https://wallhaven.cc/search?q=shanghai&categories=110&purity=100&sorting=relevance&order=desc&ai_art_filter=1",
+                1, 8, "H:\\ddd");
+    }
+
+
+    /**
+     * 爬取 wallhaven 网站图片
+     *
+     * @param url          类似于：https://wallhaven.cc/search?q=shanghai&categories=110&purity=100&sorting=relevance&order=desc&ai_art_filter=1&page=8
+     *                     如果url中带有&page=n，那就是从第n页开始下载，下载到pageNum页
+     * @param startPageNum 开始页，默认为1
+     * @param endPageNum   结束页，默认为1
+     * @param saveDir      保存目录
+     */
+    public static void crawlerWallhavenImg(String url, Integer startPageNum, Integer endPageNum, String saveDir) {
+
+        LogUtil.info("crawlerWallhavenImg execute, url = {}, endPageNum = {}, saveDir = {}", url, endPageNum, saveDir);
+
+        // 默认值设置
+        startPageNum = startPageNum == null ? 1 : startPageNum;
+        endPageNum = endPageNum == null ? 1 : endPageNum;
+        if (startPageNum > endPageNum) {
+            throw CustomExceptionEnum.PARAM_TYPE_ILLEGAL_EXCEPTION.generateCustomMessageException("开始页 = " + startPageNum + "，不应该大于结束页 = " + endPageNum);
+        }
+
+        // 处理分页信息，url截取到分页
+        int pageIndex = url.lastIndexOf("&page");
+        // 不存在则增加，存在则截取
+        url = pageIndex == -1 ? url + "&page=" : url.substring(0, pageIndex) + "&page=";
+
+        for (; startPageNum <= endPageNum; startPageNum++) {
+
+            String realUrl = url + startPageNum;
+            System.out.println(">>> test_wallhaven execute url = " + realUrl);
+
+
+//            // 获取每一页的 a 标签信息  【问题：无法获取图片类型png，直接加载jpg会导致404】
+//            List<String> urlList = CrawlerUtilClient.getAttrNameWithStaticWebPage(realUrl,
+//                    "#thumbs > section > ul > li > figure > a", "href",
+//                    CHROME_REQ_HEAD_USER_AGENT)
+//                    .stream()
+//                    // 规律特殊处理
+//                    .map(p -> {
+//                        // 外面a标签：https://wallhaven.cc/w/832262                                 https://wallhaven.cc/w/pk9kve                         https://wallhaven.cc/w/e79kp8
+//                        // 打开页面图片 https://w.wallhaven.cc/full/83/wallhaven-832262.jpg         https://w.wallhaven.cc/full/pk/wallhaven-pk9kve.jpg   https://w.wallhaven.cc/full/e7/wallhaven-e79kp8.jpg
+//                        // 最后一个/后两个字符
+//                        int index = p.lastIndexOf("/");
+//                        if (index == -1 || (index + 3) > p.length()) {
+//                            LogUtil.warn("index = {}, url = {}", index, p);
+//                            return null;
+//                        }
+//                        String imgUrl = p.replace("wallhaven", "w.wallhaven").replace("/w/", "/full/" + p.substring(index + 1, index + 3) + "/wallhaven-");
+//
+//                        // todo jpg/png? 怎么区分 要每次进入再去读取吗
+//                        return imgUrl + ".jpg";
+//                    }).collect(Collectors.toList());
+
+
+
+            // 获取 figure 标签下的所有内容，然后正则表达式解析 a 标签获取href链接，解析 span 标签获取文件类型 PNG（如果是jpg就没有【默认】）
+            // eg: <img alt=\"loading\" class=\"lazyload\" data-src=\"https://th.wallhaven.cc/small/gj/gje1o7.jpg\" src=\"\"><a class=\"preview\" href=\"https://wallhaven.cc/w/gje1o7\" target=\"_blank\"></a><div class=\"thumb-info\"><span class=\"wall-res\">1080 x 1920</span><a class=\"jsAnchor overlay-anchor wall-favs\" data-href=\"https://wallhaven.cc/wallpaper/fav/gje1o7\">4<i class=\"fa fa-fw fa-star\"></i></a><span class=\"png\"><span>PNG</span></span><a class=\"jsAnchor thumb-tags-toggle tagged\" title=\"Tags\" data-href=\"https://wallhaven.cc/wallpaper/tags/gje1o7\"><i class=\"fas fa-fw fa-tags\"></i></a></div>
+            List<String> urlList = CrawlerUtilClient.getAttrNameWithStaticWebPage(realUrl,
+                    "#thumbs > section > ul > li > figure", null,
+                    CHROME_REQ_HEAD_USER_AGENT)
+                    .stream()
+                    // 规律特殊处理
+                    .map(p -> {
+                        // 正则表达式匹配a标签
+                        Pattern previewPattern = Pattern.compile("<a class=\"preview\" href=\"(.+?)\"");
+                        Matcher previewMatcher = previewPattern.matcher(p);
+                        // 未匹配到返回空
+                        if (!previewMatcher.find()) {
+                            LogUtil.warn("a tab matcher fail, html = {}", p);
+                            return null;
+                        }
+                        // 获取第一个被匹配的字串
+                        String imgHref = previewMatcher.group(1);
+
+
+                        // 图片默认类型
+                        String imgType = "jpg";
+                        // 正则表达式匹配图片类型 jpg/png，默认jpg
+                        Pattern fileTypePattern = Pattern.compile("<span class=\"png\"><span>(.+?)</span></span>");
+                        Matcher fileTypeMatcher = fileTypePattern.matcher(p);
+                        if (fileTypeMatcher.find()) {
+                            imgType = fileTypeMatcher.group(1).toLowerCase();
+                        }
+
+
+                        // 外面a标签：https://wallhaven.cc/w/832262                                 https://wallhaven.cc/w/pk9kve                         https://wallhaven.cc/w/e79kp8
+                        // 打开页面图片 https://w.wallhaven.cc/full/83/wallhaven-832262.jpg         https://w.wallhaven.cc/full/pk/wallhaven-pk9kve.jpg   https://w.wallhaven.cc/full/e7/wallhaven-e79kp8.jpg
+                        // 最后一个/后两个字符
+                        int index = imgHref.lastIndexOf("/");
+                        if (index == -1 || (index + 3) > imgHref.length()) {
+                            LogUtil.warn("index = {}, imgHref = {}", index, imgHref);
+                            return null;
+                        }
+                        String imgUrl = imgHref.replace("wallhaven", "w.wallhaven").replace("/w/", "/full/" + imgHref.substring(index + 1, index + 3) + "/wallhaven-");
+
+                        // 读取图片类型
+                        return imgUrl + StringConstantUtil.defaultStartWith(imgType, StringConstantUtil.DOT);
+                    }).filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+
+
+            // 批量下载 todo 待处理：静态爬取不行？？
+            CrawlerUtilClient.batchDownloadByUrlWithJsoup(urlList, saveDir, ".jpg", 30, true, CHROME_REQ_HEAD_USER_AGENT);
+
+            // 休眠5s，避免浏览器 429 连接过多异常
+//            try {
+//                Thread.sleep(5000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+
+        }
+    }
 
 
 
