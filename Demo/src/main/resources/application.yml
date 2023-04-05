@@ -23,6 +23,8 @@ custom:
       file:
         # 文件重命名日志
         fileReNameLogFlag: true
+        # 文件合并日志
+        fileMergeLogFlag: true
       crawler:
         # 爬虫日志
         crawlerLogFlag: true

@@ -8,6 +8,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -475,6 +476,52 @@ public class StringConstantUtil {
     }
 
 
+
+    /**
+     * 文件大小，转换格式（eg：66666666 byte = 63.58 MB）
+     *
+     * @param byteBigDecimal 文件字节大小 单位：byte
+     * @param scale          保留
+     * @return 转换后的格式
+     */
+    public static String convertFileSize(BigDecimal byteBigDecimal, int scale) {
+
+        // 比较单位
+        BigDecimal compareUnit = new BigDecimal(1);
+        // 数据进制
+        BigDecimal kb = new BigDecimal(1024);
+        BigDecimal mb = new BigDecimal(1024).multiply(kb);
+        BigDecimal gb = new BigDecimal(1024).multiply(mb);
+        BigDecimal tb = new BigDecimal(1024).multiply(gb);
+        BigDecimal pb = new BigDecimal(1024).multiply(tb);
+        BigDecimal eb = new BigDecimal(1024).multiply(pb);
+
+        if (byteBigDecimal.divide(kb, scale, BigDecimal.ROUND_HALF_UP).compareTo(compareUnit) < 0) {
+            return byteBigDecimal.divide(compareUnit, scale, BigDecimal.ROUND_HALF_UP).toString() + " B";
+        }
+
+        if (byteBigDecimal.divide(mb, scale, BigDecimal.ROUND_HALF_UP).compareTo(compareUnit) < 0) {
+            return byteBigDecimal.divide(kb, scale, BigDecimal.ROUND_HALF_UP).toString() + " KB";
+        }
+
+        if (byteBigDecimal.divide(gb, scale, BigDecimal.ROUND_HALF_UP).compareTo(compareUnit) < 0) {
+            return byteBigDecimal.divide(mb, scale, BigDecimal.ROUND_HALF_UP).toString() + " MB";
+        }
+
+        if (byteBigDecimal.divide(tb, scale, BigDecimal.ROUND_HALF_UP).compareTo(compareUnit) < 0) {
+            return byteBigDecimal.divide(gb, scale, BigDecimal.ROUND_HALF_UP).toString() + " GB";
+        }
+
+        if (byteBigDecimal.divide(pb, scale, BigDecimal.ROUND_HALF_UP).compareTo(compareUnit) < 0) {
+            return byteBigDecimal.divide(tb, scale, BigDecimal.ROUND_HALF_UP).toString() + " TB";
+        }
+
+        if (byteBigDecimal.divide(eb, scale, BigDecimal.ROUND_HALF_UP).compareTo(compareUnit) < 0) {
+            return byteBigDecimal.divide(pb, scale, BigDecimal.ROUND_HALF_UP).toString() + " PB";
+        }
+
+        return byteBigDecimal.divide(eb, scale, BigDecimal.ROUND_HALF_UP).toString() + " EB";
+    }
 
     //  >>>>>>>>>> 封装 <<<<<<<<<<
     public static boolean isBlank(String str) {

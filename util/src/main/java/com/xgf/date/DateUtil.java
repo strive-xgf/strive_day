@@ -60,6 +60,11 @@ public class DateUtil {
     public static final String FORMAT_TIME_SECOND = "HH:mm:ss";
 
     /**
+     * 精确到秒，下划线分隔
+     */
+    public static final String FORMAT_TIME_SECOND_UNDERLINE = "yyyy_MM_dd_HH_mm_ss";
+
+    /**
      * 默认时间解析格式：yyyy-MM-dd
      */
     public static SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DAY);
