@@ -1,0 +1,10 @@
+server:
+  port: 8612
+# 应用名称
+spring:
+  # 环境
+  profiles:
+    active: dev
+  application:
+    name: striveWebPage
+

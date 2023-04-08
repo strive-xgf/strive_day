@@ -18,6 +18,7 @@
     <modules>
         <module>util</module>
         <module>Demo</module>
+        <module>WebFacade</module>
     </modules>
 
     <properties>
