@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<!-- 欢迎主页面（实时时钟） -->
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>365util - 时钟</title>
+
+</head>
+
+<style>
+    * {
+        padding: 0px; /* 内边距 */
+        margin: 0px; /*外边距 */
+        box-sizing: border-box; /* 盒子模型 ,作用自动计算 */
+    }
+
+    body {
+        font-family: monospace; /* 字体 */
+        font-size: 2rem; /* rem是css3的新单位，叫相对单位，rem更加适配iphone和ipad，   默认1rem=16px，但是可以修改默认值 2rem=32px 就相当于字体放大几倍*/
+        min-height: 100vh; /* 视窗高度 1vh等于视窗高度的百分之一1% ，视口/视窗高度就是所看到的页面高度 */
+        display: grid; /* 改变成栅格（网格）  */
+        overflow-y: hidden; /* Y轴溢出隐藏 */
+        place-content: center; /* 水平垂直居中 */
+        background: linear-gradient(-45deg, #c4d2ef, #dfe6f6); /* 线性渐变(角度、颜色、颜色) */
+    }
+
+    .hr,
+    .min,
+    .sec {
+        display: grid; /* 改成栅格 */
+        grid-template-columns: 1fr 1fr; /* 网格分列 */
+        grid-gap: 2rem;
+        grid-row: 1/2; /* 分成两列 */
+        align-items: start;
+    }
+
+    .number {
+        padding: 0.5rem;
+        width: 4rem;
+        height: 4rem;
+        display: grid;
+        place-items: center;
+        /*color: #9ffbdf;	*/
+        transition: 500ms 100ms ease;
+        border-radius: 50%; /* 圆角， 50%是圆形 */
+    }
+
+    .number.pop {
+        color: #3e6ccd;
+        font-weight: bold;
+        transform: scale(1.3);
+        background-color: #dfe6f6;
+        box-shadow: -10px -10px 20px -5px #f9fbfd, 10px 10px 20px #a9bee8;
+    }
+
+    .strip {
+        transition: transform 500ms ease-in-out; /* 动画效果 */
+        border-radius: 8px; /* 圆角 */
+        background: #dfe6f6;
+        box-shadow: -10px -10px 20px -5px #f9fbfd, 10px 10px 20px #a9bee8; /* 阴影 */
+    }
+
+    .clock {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 3rem;
+        height: 4rem;
+        position: relative; /* 相对定位 */
+        padding: 0 4rem; /* 内边距 */
+    }
+
+</style>
+
+<body>
+<div class="clock">
+    <!-- 小时 最大24  一天24小时  strip是外层的大框-->
+    <div class="hr">
+        <!-- 时，第一位值： 012  -->
+        <div class="strip">
+            <div class="number">0</div>
+            <div class="number">1</div>
+            <div class="number">2</div>
+        </div>
+        <!-- 时，第二位数字 -->
+        <div class="strip">
+            <div class="number">0</div>
+            <div class="number">1</div>
+            <div class="number">2</div>
+            <div class="number">3</div>
+            <div class="number">4</div>
+            <div class="number">5</div>
+            <div class="number">6</div>
+            <div class="number">7</div>
+            <div class="number">8</div>
+            <div class="number">9</div>
+        </div>
+
+    </div>
+    <!--分 最大59-->
+    <div class="min">
+        <!-- 分 第一位数字 -->
+        <div class="strip">
+            <div class="number">0</div>
+            <div class="number">1</div>
+            <div class="number">2</div>
+            <div class="number">3</div>
+            <div class="number">4</div>
+            <div class="number">5</div>
+        </div>
+        <!-- 分 第二位数字 -->
+        <div class="strip">
+            <div class="number">0</div>
+            <div class="number">1</div>
+            <div class="number">2</div>
+            <div class="number">3</div>
+            <div class="number">4</div>
+            <div class="number">5</div>
+            <div class="number">6</div>
+            <div class="number">7</div>
+            <div class="number">8</div>
+            <div class="number">9</div>
+        </div>
+    </div>
+
+    <!--秒   最大59-->
+    <div class="sec">
+        <!-- 秒 第一位数字 -->
+        <div class="strip">
+            <div class="number">0</div>
+            <div class="number">1</div>
+            <div class="number">2</div>
+            <div class="number">3</div>
+            <div class="number">4</div>
+            <div class="number">5</div>
+        </div>
+        <!-- 秒 第一位数字 -->
+        <div class="strip">
+            <div class="number">0</div>
+            <div class="number">1</div>
+            <div class="number">2</div>
+            <div class="number">3</div>
+            <div class="number">4</div>
+            <div class="number">5</div>
+            <div class="number">6</div>
+            <div class="number">7</div>
+            <div class="number">8</div>
+            <div class="number">9</div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // 找到当前所有的strip的列
+    const strips = [...document.querySelectorAll(".strip")];
+    const numberSize = "4";
+    // 找到当前数据并添加pop样式类
+    // querySelector是选择，classList.add(类名)是添加CSS央视
+    // setTimeout定时器,通过定时器去修改我们的数组，监听时间950毫秒
+    function highlight(strip, d) {
+        strips[strip]
+            .querySelector(`.number:nth-of-type(${d + 1})`)
+            .classList.add("pop");
+
+        setTimeout(() => {
+            strips[strip]
+                .querySelector(`.number:nth-of-type(${d + 1})`)
+                .classList.remove("pop");
+        }, 950);
+    }
+
+    // 定义一个方法进行截取，并添加一个动画效果
+    // transform:translateY是添加动画效果
+    function stripSlider(strip, number) {
+        let d1 = Math.floor(number / 10);
+        let d2 = number % 10;
+
+        strips[strip].style.transform = `translateY(${d1 * -numberSize}rem)`;
+        highlight(strip, d1);
+        strips[strip + 1].style.transform = `translateY(${d2 * -numberSize}rem)`;
+        highlight(strip + 1, d2);
+    }
+
+    // 获取当前系统时间，并且传递给stripSlider方法
+    setInterval(() => {
+        const time = new Date();
+        const hours = time.getHours();
+        const mins = time.getMinutes();
+        const secs = time.getSeconds();
+        stripSlider(0, hours);
+        stripSlider(2, mins);
+        stripSlider(4, secs);
+    }, 1000);
+
+
+</script>
+</body>
+</html>
+
+

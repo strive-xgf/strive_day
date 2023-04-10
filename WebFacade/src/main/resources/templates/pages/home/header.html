@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<!-- 声明使用 Thymeleaf 模板引擎的HTML文件-->
+<!-- lang="en"指定了页面语言为英文 xmlns:th="http://www.thymeleaf.org"定义了Thymeleaf命名空间，并使得在该页面中可以使用Thymeleaf的相关属性和表达式-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- th:fragment 定义页面头部内容 -->
+<div th:fragment="header">
+    <header class="main-header">
+        <!-- todo -->
+        <a href="#" class="logo">
+            <span class="logo-mini">
+<!--                <img src="" height="41px" width="32px">-->
+                <b>util</b>
+            </span>
+            <span class="logo-lg">
+<!--                        <img src="">-->
+                        <b> 365util </b>实用工具
+                    </span>
+        </a>
+
+
+        <nav class="navbar navbar-static-top">
+            <!-- 左侧三根横线，收缩左侧菜单栏 -->
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+
+            <!-- 邮件信息 -->
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-envelope-o"></i>
+                            <span class="label label-success">2</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">您有2个邮件</li>
+                            <li>
+                                <ul class="menu">
+                                    <li>
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="../img/visitor.jpg" class="img-circle" alt="User Image">
+                                            </div>
+                                            <h4>
+                                                系统消息
+                                                <small><i class="fa fa-clock-o"></i> 5 分钟前</small>
+                                            </h4>
+                                            <p>欢迎登录系统！</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="../img/visitor.jpg" class="img-circle" alt="User Image">
+                                            </div>
+                                            <h4>
+                                                上新消息
+                                                <small><i class="fa fa-clock-o"></i> 2 小时前</small>
+                                            </h4>
+                                            <p>有新功能发布啦：图片裁剪功能</p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#">查看所有邮件</a></li>
+                        </ul>
+                    </li>
+
+
+                    <!-- 通知信息 -->
+                    <li class="dropdown notifications-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-bell-o"></i>
+                            <span class="label label-warning">2</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">您有2个新消息</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-warning text-yellow"></i> Very long description here that
+                                            may not
+                                            fit into the page and may cause design problems
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#">查看所有消息</a></li>
+                        </ul>
+                    </li>
+
+
+                    <!-- 任务栏 -->
+                    <li class="dropdown tasks-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-flag-o"></i>
+                            <span class="label label-danger">1</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">你有1个新任务</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                    <li>
+                                        <a href="#">
+                                            <h3>
+                                                学习两小时
+                                                <small class="pull-right">20%</small>
+                                            </h3>
+                                            <div class="progress xs">
+                                                <div class="progress-bar progress-bar-aqua" style="width: 20%"
+                                                     role="progressbar" aria-valuenow="20" aria-valuemin="0"
+                                                     aria-valuemax="100">
+                                                    <span class="sr-only">20% Complete</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="footer">
+                                <a href="#">查看所有任务</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <!-- 用户信息 -->
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <!-- todo 用户信息-->
+                            <img src="../img/visitor.jpg" class="user-image" alt="User Image">
+                            <span class="hidden-xs"> <span>游客访问</span></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <li class="user-header">
+                                <!-- todo 图片 -->
+                                <img src="../img/visitor.jpg" class="img-circle" alt="User Image">
+                                <p>
+                                    <!-- todo 点击显示用户信息 -->
+                                </p>
+                            </li>
+                            <!-- Menu body-->
+                            <li class="user-body">
+                                <div class="row">
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">粉丝</a>
+                                    </div>
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">朋友</a>
+                                    </div>
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">关注</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="#" class="btn btn-default btn-flat">修改密码</a>
+                                </div>
+                                <div class="pull-right">
+                                    <!--非加密方式注销-->
+                                    <a href="#" class="btn btn-default btn-flat">注销</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+
+
+    </header>
+</div>
+</body>
+</html>
+

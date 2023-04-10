@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<!-- 声明使用 Thymeleaf 模板引擎的HTML文件-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- 引入共有js、css -->
+<!-- <div th:replace="pages/common/base :: base">base引入</div>-->
+
+<body>
+
+<!-- th:fragment 定义左侧边功能栏 -->
+<div th:fragment="left_menu">
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <!-- todo 头像地址 -->
+                    <img src="../img/visitor.jpg" class="img-circle" alt="用户头像加载中"/>
+                </div>
+                <div class="pull-left info">
+                    <!-- todo 显示登录用户信息 -->
+                    <p> <span >游客访问</span></p>
+                    <a href="#"><span>背包客</span></a>
+                </div>
+            </div>
+
+            <!-- 左侧导航栏 -->
+            <ul class="sidebar-menu">
+                <li class="header">工具导航</li>
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-cube"></i> <span>File文件工具类</span>
+                        <span class="pull-right-container">
+                           <i class="fa fa-angle-left pull-right"></i>
+                       </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li id="company-1">
+                            <a th:href="@{${#httpServletRequest.getContextPath()}+'/page/'}" onclick="setSidebarActive(this)" target="iframe">
+                                <i class="fa fa-circle-o"></i>批量文件删除
+                            </a>
+                        </li>
+                        <li id="company-2">
+                            <a th:href="@{/page/}" onclick="setSidebarActive(this)" target="iframe">
+                                <i class="fa fa-circle-o"></i>文件批量转移
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-cube"></i> <span>Excel工具类</span>
+                        <span class="pull-right-container">
+                           <i class="fa fa-angle-left pull-right"></i>
+                       </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li id="excelBatch">
+                            <a th:href="@{/page/}" onclick="setSidebarActive(this)" target="iframe">
+                                <i class="fa fa-circle-o"></i>excel批量处理
+                            </a>
+                        </li>
+                        <li id="excelStyle">
+                            <a th:href="@{/page/}" onclick="setSidebarActive(this)" target="iframe">
+                                <i class="fa fa-circle-o"></i>excel样式修改
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        </section>
+    </aside>
+</div>
+</body>
+</html>

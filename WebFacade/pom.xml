@@ -19,6 +19,12 @@
             <groupId>com.xgf</groupId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <!-- 引入 thymeleaf (springboot 页面模板引擎技术）-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

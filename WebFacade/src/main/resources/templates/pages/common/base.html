@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!-- 声明使用 Thymeleaf 模板引擎的HTML文件-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>共有css样式及js加载</title>
+</head>
+<body>
+
+<!-- th:fragment 定义需要引入的公共代码块样式，通用css引入 -->
+<div th:fragment="base">
+
+    <!-- css 样式 -->
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+
+    <!-- font 字体库 -->
+    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+
+    <!-- jquery -->
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <!-- header 信息头像等点开效果 -->
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- 左侧菜单栏缩放和展开，多级菜单缩放 -->
+    <script src="../plugins/adminLTE/js/app.min.js"></script>
+
+
+
+    <!--    &lt;!&ndash; css 样式 &ndash;&gt;-->
+<!--    <link rel="stylesheet" th:href="${#httpServletRequest.getContextPath()}+'/plugins/bootstrap/css/bootstrap.min.css'">-->
+<!--    <link rel="stylesheet" th:href="${#httpServletRequest.getContextPath()}+'/plugins/adminLTE/css/AdminLTE.css'">-->
+<!--    <link rel="stylesheet" th:href="${#httpServletRequest.getContextPath()}+'/plugins/adminLTE/css/skins/_all-skins.min.css'">-->
+
+<!--    &lt;!&ndash; font 字体库 &ndash;&gt;-->
+<!--    <link rel="stylesheet" th:href="${#httpServletRequest.getContextPath()}+'/plugins/font-awesome/css/font-awesome.min.css'">-->
+
+<!--    &lt;!&ndash; jquery &ndash;&gt;-->
+<!--    <script th:href="${#httpServletRequest.getContextPath()}+'/plugins/jQuery/jquery-2.2.3.min.js'"></script>-->
+<!--    &lt;!&ndash; header 信息头像等点开效果 &ndash;&gt;-->
+<!--    <script th:href="${#httpServletRequest.getContextPath()}+'/plugins/bootstrap/js/bootstrap.min.js'"></script>-->
+<!--    &lt;!&ndash; 左侧菜单栏缩放和展开，多级菜单缩放 &ndash;&gt;-->
+<!--    <script th:href="${#httpServletRequest.getContextPath()}+'/plugins/adminLTE/js/app.min.js'"></script>-->
+
+
+</div>
+
+</body>
+</html>

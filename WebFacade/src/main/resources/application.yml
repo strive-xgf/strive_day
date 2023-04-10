@@ -1,5 +1,8 @@
 server:
   port: 8612
+  servlet:
+    # 配置项目路径（中通过 ${#servletContext.getContextPath()} 获取这个值，Thymeleaf表达式，获取当前应用context path属性值）
+    context-path: /365util
 # 应用名称
 spring:
   # 环境
@@ -7,4 +10,16 @@ spring:
     active: dev
   application:
     name: striveWebPage
+  thymeleaf:
+    enabled: true
+    # thymeleaf模板引擎在解析视图时的前缀
+    prefix: classpath:/templates/
+    # thymeleaf模板引擎在解析视图时的后缀
+    suffix: .html
+    # 页面缓存，开发环境建议设置为false，不开启，生产环境设置为true
+    cache: false
+  web:
+    resources:
+      # 指定静态资源位置
+      static-locations: classpath:/static/
 
