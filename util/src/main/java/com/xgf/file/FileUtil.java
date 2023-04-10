@@ -97,20 +97,43 @@ public class FileUtil {
     }
 
     /**
-     * 创建目录和文件
+     * 创建目录和文件，存在则先删除，再创建
      *
-     * @param url 路径url
+     * @param path 路径path
      * @return File
      */
-    public static File createFileAndDir(String url) {
+    public static File createFileAndDirExistDelete(String path) {
+        existDelete(path);
+        return createFileAndDir(path);
+    }
 
-        File file = new File(url);
+    /**
+     * 文件存在则删除
+     *
+     * @param path 文件路径
+     */
+    public static void existDelete(String path) {
+        File file = new File(path);
+        if (file.exists()) {
+            if (!file.delete()) {
+                // 删除失败，且文件还存在，则抛出异常
+                ThrowExceptionFunctionUtil.isTureThrow(file.exists()).throwMessage("文件删除失败，无法创建，file path = " + path);
+            }
+        }
+    }
+
+
+    public static File createFileAndDir(String path) {
+        return createFileAndDir(new File(path));
+    }
+
+    public static File createFileAndDir(File file) {
 
         if (!file.getParentFile().exists()) {
             // 创建父级目录
             if (!file.getParentFile().mkdirs()) {
                 // 文件目录创建失败（多线程环境，可能被其它线程创建，校验文件是否存在，不存在再抛出异常
-                ThrowExceptionFunctionUtil.isFalseThrow(file.getParentFile().exists()).throwMessage("文件目录创建异常，file path = " + url);
+                ThrowExceptionFunctionUtil.isFalseThrow(file.getParentFile().exists()).throwMessage("文件目录创建异常，file path = " + file.getPath());
             }
         }
 
@@ -119,7 +142,7 @@ public class FileUtil {
                 // 创建文件
                 if (!file.createNewFile()) {
                     // 文件创建失败判断文件是否已存在，不存在抛出异常
-                    ThrowExceptionFunctionUtil.isFalseThrow(file.exists()).throwMessage("文件创建异常，file path = " + url);
+                    ThrowExceptionFunctionUtil.isFalseThrow(file.exists()).throwMessage("文件创建异常，file path = " + file.getPath());
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);

@@ -25,6 +25,8 @@ custom:
         fileReNameLogFlag: true
         # 文件合并日志
         fileMergeLogFlag: true
+        # 文件图片处理日志
+        fileImageLogFlag: true
       crawler:
         # 爬虫日志
         crawlerLogFlag: true
