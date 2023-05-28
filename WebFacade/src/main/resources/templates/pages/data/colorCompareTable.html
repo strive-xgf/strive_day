@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>colorCompareTable</title>
+
+    <!-- css 样式 -->
+    <link rel="stylesheet" href="../css/tableStyle.css">
+    <!-- js -->
+    <script src="/static/js/vuejs-2.5.16.js"
+            th:src="${#httpServletRequest.getContextPath()}+'/js/vuejs-2.5.16.js'"></script>
+    <script src="/static/js/axios-0.18.0.js"
+            th:src="${#httpServletRequest.getContextPath()}+'/js/axios-0.18.0.js'"></script>
+
+
+
+</head>
+<body>
+
+
+<table id = "colorCompareTablePage">
+    <thead>
+    <tr>
+        <th>序号</th>
+        <th>颜色图</th>
+        <th>中文名称</th>
+        <th>英文名称</th>
+        <th>颜色值</th>
+        <th>R(rgb)</th>
+        <th>G(rgb)</th>
+        <th>B(rgb)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="(dataAlias, index) in colorCompareDataList">
+        <td data-title="index">{{index}}</td>
+        <td data-title="color img" :style="{ backgroundColor:dataAlias.colorValue }" width="25%"></td>
+        <td data-title="colorCnName">{{dataAlias.colorCnName}}</td>
+        <td data-title="colorEnName">{{dataAlias.colorEnName}}</td>
+        <td data-title="colorValue">{{dataAlias.colorValue}}</td>
+        <td data-title="colorR">{{dataAlias.colorR}}</td>
+        <td data-title="colorG">{{dataAlias.colorG}}</td>
+        <td data-title="colorB">{{dataAlias.colorB}}</td>
+    </tr>
+
+    </tbody>
+</table>
+
+<script src="../static/js/data/colorCompareTable.js"
+        th:src="${#httpServletRequest.getContextPath()}+'/js/data/colorCompareTable.js'"></script>
+
+</body>
+
+</html>

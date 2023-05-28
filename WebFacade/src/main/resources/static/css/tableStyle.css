@@ -1,0 +1,46 @@
+/*body {*/
+/*    background: #373737;*/
+/*    font-family: Arial, sans-serif;*/
+/*}*/
+table {
+    border-collapse: collapse;
+    margin: 50px auto;
+    overflow: hidden;
+    width: 92%;
+}
+th, td {
+    border: 1px solid white;
+    padding: 12px 15px;
+    position: relative;
+    text-align: center;
+}
+th {
+    background-color: #191919;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+td {
+    background-color: #282828;
+    color: #ddd;
+    /* 鼠标在单元格上滑动变化时间 */
+    transition: all 0.2s ease-in-out;
+}
+tr:hover td {
+    background-color: #383838;
+    color: white;
+    transform: scale(1.05);
+}
+td:before {
+    /*background-color: #4c4c4c;*/
+    bottom: -50px;
+    content: attr(data-title);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    left: 0;
+    position: absolute;
+    width: 100%;
+}

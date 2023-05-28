@@ -23,9 +23,28 @@
                 </div>
             </div>
 
+
             <!-- 左侧导航栏 -->
             <ul class="sidebar-menu">
                 <li class="header">工具导航</li>
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-cube"></i> <span>常用数据参考</span>
+                        <span class="pull-right-container">
+                           <i class="fa fa-angle-left pull-right"></i>
+                       </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li id="colorCompareTable">
+                            <a th:href="@{/data/colorCompareTable}" onclick="setSidebarActive(this)" target="iframe">
+                                <i class="fa fa-circle-o"></i>常用颜色对照表
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
 
                 <li class="treeview">
                     <a href="#">
@@ -73,6 +92,15 @@
 
         </section>
     </aside>
+
+    <script>
+        // 左侧菜单栏切换激活效果
+        function setSidebarActive(th){
+            $(th).parent("li").siblings().removeClass("active");
+            $(th).parent("li").addClass("active");
+        }
+    </script>
+
 </div>
 </body>
 </html>
