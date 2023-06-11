@@ -19,6 +19,7 @@
         <module>util</module>
         <module>Demo</module>
         <module>WebFacade</module>
+        <module>CommonConfig</module>
     </modules>
 
     <properties>
@@ -64,6 +65,10 @@
     </properties>
 
 
+    <!-- 只是声明依赖，并不引入实现，子项目显示的声明引用，锁定版本 -->
+    <dependencyManagement>
+
+    </dependencyManagement>
     <dependencies>
 
         <!-- springboot -->

@@ -12,13 +12,20 @@
 
     <artifactId>Demo</artifactId>
 
-    <!-- 依赖 util 工程，可以使用util工程的类 -->
     <dependencies>
+        <!-- 依赖 util 工程，可以使用util工程的类 -->
         <dependency>
             <artifactId>util</artifactId>
             <groupId>com.xgf</groupId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <artifactId>CommonConfig</artifactId>
+            <groupId>com.xgf</groupId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
 </project>

@@ -19,9 +19,6 @@ import java.util.List;
  * @create 2023-05-28 23:15
  * @description 数据展示 controller
  */
-
-// @CrossOrigin 解决跨域问题
-@CrossOrigin
 @RestController
 @RequestMapping("/data")
 @Slf4j

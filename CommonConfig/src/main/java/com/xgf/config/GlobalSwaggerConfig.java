@@ -1,4 +1,4 @@
-package com.xgf.webfacade.config.swagger;
+package com.xgf.config;
 
 import com.xgf.constant.StringConstantUtil;
 import com.xgf.constant.reqrep.header.RequestDeviceUtil;
@@ -32,7 +32,7 @@ import java.util.List;
 @Slf4j
 @Configuration
 @EnableSwagger2
-public class WebPageSwaggerConfig {
+public class GlobalSwaggerConfig {
 
     /**
      * 自定义页面实现展示效果
